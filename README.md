@@ -1,5 +1,5 @@
 # webboot
-基于Spring Boot的管理后台（学习及二次开发）
+Admin管理后台（基于SpringBoot的学习及二次开发框架）
 
 ### 基本功能
 1. 菜单管理  

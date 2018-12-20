@@ -1,0 +1,61 @@
+package ${packageName}.${module}.service.impl;
+
+import ${packageName}.${module}.dao.${table.className}Dao;
+import ${packageName}.${module}.entity.${table.className};
+import ${packageName}.${module}.service.${table.className}Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class ${table.className}ServiceImpl implements ${table.className}Service
+{
+
+    @Autowired
+    private ${table.className}Dao ${table.fieldName}Dao;
+
+    @Override
+    public int count(Map<String, Object> map)
+    {
+        return ${table.fieldName}Dao.count(map);
+    }
+
+    @Override
+    public List<${table.className}> list(Map<String, Object> map)
+    {
+        return ${table.fieldName}Dao.list(map);
+    }
+
+    @Override
+    public  ${table.className} get(${pk.javaType} ${pk.fieldName})
+    {
+        return ${table.fieldName}Dao.get(${pk.fieldName});
+    }
+
+    @Override
+    public int save(${table.className} ${table.fieldName})
+    {
+        return ${table.fieldName}Dao.save(${table.fieldName});
+    }
+
+    @Override
+    public int update(${table.className} ${table.fieldName})
+    {
+        return ${table.fieldName}Dao.update(${table.fieldName});
+    }
+
+    @Override
+    public int remove(${pk.javaType} ${pk.fieldName})
+    {
+        return ${table.fieldName}Dao.remove(${pk.fieldName});
+    }
+
+    @Override
+    public int batchRemove(${pk.javaType}[] ${pk.fieldName}s)
+    {
+        return ${table.fieldName}Dao.batchRemove(${pk.fieldName}s);
+    }
+
+}

@@ -1,0 +1,97 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger" th:text="#{label.edit}+#{system.menu}"></h5>
+</div>
+
+<div class="modal-body">
+    <form id="system_menu_edit_form" class="form-horizontal">
+        <input type="hidden" name="id" th:value="${menu.id}"/>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{system.menu.pid}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="hidden" name="pid" th:value="${menu.pid}"/>
+                    <input type="text" th:value="${pname}" class="form-control" readonly="readonly" disabled="disabled"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{system.menu.icon}"></label>
+            <div class="col-xs-12 col-sm-3">
+                <span class="block input-icon input-icon-right">
+                    <input type="hidden" name="icon" th:value="${menu.icon}"/>
+                    <input id="icon_font_picker" type="text"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                <div id="icon_color_picker" style="margin-top: 3px;"></div>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{system.menu.name}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="name" th:value="${menu.name}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{system.menu.url}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="url" th:value="${menu.url}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{system.menu.permission}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="permission" th:value="${menu.permission}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{system.menu.type}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <select name="type" class="form-control">
+                        <option value="">-----</option>
+                        <option th:selected="${menu.type == -1}" value="-1">其他</option>
+                        <option th:selected="${menu.type == 0}" value="0">目录</option>
+                        <option th:selected="${menu.type == 1}" value="1">菜单</option>
+                        <option th:selected="${menu.type == 2}" value="2">按钮</option>
+                    </select>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{system.menu.orders}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="number" name="orders" th:value="${menu.orders}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+    </form>
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+        <button class="btn btn-sm btn-primary" onclick="systemMenuEdit();">
+            <i class="ace-icon fa fa-check"></i>
+            <span th:text="#{confirm.btn.save}"></span>
+        </button>
+    </div>
+</div>
+
+<script src="js/app/system/menu/edit.js"></script>

@@ -1,0 +1,65 @@
+<div id="common_generator_content">
+
+    <!--permission-->
+    <shiro:hasPermission name="common:generator:get">
+        <input type="hidden" name="hidden_get" th:value="#{btn.get}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="common:generator:code">
+        <input type="hidden" name="hidden_code" th:value="#{btn.code}"/>
+    </shiro:hasPermission>
+
+    <!--widget-->
+    <div id="common_generator_widget" class="widget-box">
+        <!--head-->
+        <div class="widget-header widget-header-small">
+            <div class="widget-toolbar">
+                <a href="#" data-action="fullscreen">
+                    <i class="ace-icon fa fa-expand info bigger-125"></i>
+                </a>
+            </div>
+        </div><!--/.widget-header-->
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <!--query-->
+                <!--toolbar-->
+                <div id="common_generator_toolbar">
+                    <button shiro:hasPermission="common:generator:batchCode" class="btn btn-primary btn-sm"
+                            th:title="#{btn.batchCode}"
+                            onclick="commonGeneratorBatchCode();">
+                        <i class="ace-icon glyphicon glyphicon-file"></i>
+                        <span th:text="#{btn.batchCode}"></span>
+                    </button>
+                </div>
+
+                <!--table-->
+                <table id="common_generator_table" class="table table-bordered table-hover" data-show-jumpto="true">
+                    <thead>
+                    <tr>
+                        <th data-valign="middle"></th>
+                        <th data-field="tableName" data-valign="middle"><span
+                                th:text="#{common.table.tableName}"></span></th>
+                        <th data-field="tableComment" data-valign="middle"><span
+                                th:text="#{common.table.tableComment}"></span></th>
+                        <th data-field="createTime" data-valign="middle"><span
+                                th:text="#{common.table.createTime}"></span></th>
+                        <th data-field="tableName" data-valign="middle"><span></span></th>
+                    </tr>
+                    </thead>
+                </table>
+
+            </div><!--/.widget-main-->
+        </div><!--/.widget-body-->
+    </div>
+
+    <!--dialog-->
+    <div id="common_generator_dialog" class="modal" tabindex="-1" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="js/app/common/generator/main.js"></script>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cit.web.common.dao.LogDao">
+    <!--结果集-->
+    <resultMap id="logResultMap" type="com.cit.web.common.entity.Log">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="action" jdbcType="VARCHAR" property="action"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="method" jdbcType="TINYINT" property="method"/>
+        <result column="args" jdbcType="LONGVARCHAR" property="args"/>
+        <result column="func" jdbcType="VARCHAR" property="func"/>
+        <result column="os" jdbcType="VARCHAR" property="os"/>
+        <result column="browser" jdbcType="VARCHAR" property="browser"/>
+        <result column="cost" jdbcType="INTEGER" property="cost"/>
+        <result column="happen" jdbcType="TIMESTAMP" property="happen"/>
+    </resultMap>
+
+    <!--查询数量-->
+    <select id="count" resultType="int">
+        SELECT COUNT(0)
+        FROM sys_log
+        <where>
+          <if test="id != null and id.trim() != ''">and `id` = #{id}</if>
+          <if test="username != null and username.trim() != ''">and `username` = #{username}</if>
+          <if test="ip != null and ip.trim() != ''">and `ip` = #{ip}</if>
+          <if test="action != null and action.trim() != ''">and `action` = #{action}</if>
+          <if test="url != null and url.trim() != ''">and `url` = #{url}</if>
+          <if test="method != null and method.trim() != ''">and `method` = #{method}</if>
+          <if test="args != null and args.trim() != ''">and `args` = #{args}</if>
+          <if test="func != null and func.trim() != ''">and `func` = #{func}</if>
+          <if test="os != null and os.trim() != ''">and `os` = #{os}</if>
+          <if test="browser != null and browser.trim() != ''">and `browser` = #{browser}</if>
+          <if test="cost != null and cost.trim() != ''">and `cost` = #{cost}</if>
+          <if test="happen != null and happen.trim() != ''">and `happen` = #{happen}</if>
+        </where>
+    </select>
+
+    <!--查询列表-->
+    <select id="list" resultMap="logResultMap">
+        SELECT
+        `id`,
+        `username`,
+        `ip`,
+        `action`,
+        `url`,
+        `method`,
+        `args`,
+        `func`,
+        `os`,
+        `browser`,
+        `cost`,
+        `happen`
+        FROM sys_log
+        <where>
+            <if test="id != null and id.trim() != ''">and `id` = #{id}</if>
+            <if test="username != null and username.trim() != ''">and `username` = #{username}</if>
+            <if test="ip != null and ip.trim() != ''">and `ip` = #{ip}</if>
+            <if test="action != null and action.trim() != ''">and `action` = #{action}</if>
+            <if test="url != null and url.trim() != ''">and `url` = #{url}</if>
+            <if test="method != null and method.trim() != ''">and `method` = #{method}</if>
+            <if test="args != null and args.trim() != ''">and `args` = #{args}</if>
+            <if test="func != null and func.trim() != ''">and `func` = #{func}</if>
+            <if test="os != null and os.trim() != ''">and `os` = #{os}</if>
+            <if test="browser != null and browser.trim() != ''">and `browser` = #{browser}</if>
+            <if test="cost != null and cost.trim() != ''">and `cost` = #{cost}</if>
+            <if test="happen != null and happen.trim() != ''">and `happen` = #{happen}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY `${sort}` ${order}
+            </when>
+            <otherwise>
+                ORDER BY `id` ${order}
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--获取-->
+    <select id="get" resultMap="logResultMap">
+        SELECT
+        `id`,
+        `username`,
+        `ip`,
+        `action`,
+        `url`,
+        `method`,
+        `args`,
+        `func`,
+        `os`,
+        `browser`,
+        `cost`,
+        `happen`
+        FROM sys_log
+        WHERE `id` = #{id}
+    </select>
+
+    <!--插入-->
+    <insert id="save" parameterType="com.cit.web.common.entity.Log" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_log
+        (
+        `username`,
+        `ip`,
+        `action`,
+        `url`,
+        `method`,
+        `args`,
+        `func`,
+        `os`,
+        `browser`,
+        `cost`,
+        `happen`
+        )
+        VALUES
+        (
+        #{username},
+        #{ip},
+        #{action},
+        #{url},
+        #{method},
+        #{args},
+        #{func},
+        #{os},
+        #{browser},
+        #{cost},
+        #{happen}
+        )
+    </insert>
+
+    <!--更新-->
+    <update id="update" parameterType="com.cit.web.common.entity.Log">
+        UPDATE sys_log
+        <set>
+          <if test="username != null">`username` = #{username},</if>
+          <if test="ip != null">`ip` = #{ip},</if>
+          <if test="action != null">`action` = #{action},</if>
+          <if test="url != null">`url` = #{url},</if>
+          <if test="method != null">`method` = #{method},</if>
+          <if test="args != null">`args` = #{args},</if>
+          <if test="func != null">`func` = #{func},</if>
+          <if test="os != null">`os` = #{os},</if>
+          <if test="browser != null">`browser` = #{browser},</if>
+          <if test="cost != null">`cost` = #{cost},</if>
+          <if test="happen != null">`happen` = #{happen},</if>
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <!--删除-->
+    <delete id="remove">
+        DELETE FROM sys_log WHERE `id` = #{id}
+    </delete>
+
+    <!--批量删除-->
+    <delete id="batchRemove">
+        DELETE FROM sys_log WHERE `id` IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--批量插入-->
+    <insert id="batchSave" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_log
+        (
+        `username`,
+        `ip`,
+        `action`,
+        `url`,
+        `method`,
+        `args`,
+        `func`,
+        `os`,
+        `browser`,
+        `cost`,
+        `happen`
+        )
+        VALUES
+        <foreach collection="logs" item="log" separator=",">
+        (
+        #{log.username},
+        #{log.ip},
+        #{log.action},
+        #{log.url},
+        #{log.method},
+        #{log.args},
+        #{log.func},
+        #{log.os},
+        #{log.browser},
+        #{log.cost},
+        #{log.happen}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

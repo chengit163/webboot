@@ -1,0 +1,78 @@
+<div id="system_menu_content">
+
+    <input type="hidden" name="hidden_label" th:value="#{system.menu}"/>
+    <!--permission-->
+    <shiro:hasPermission name="system:menu:get">
+        <input type="hidden" name="hidden_get" th:value="#{btn.get}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="system:menu:update">
+        <input type="hidden" name="hidden_update" th:value="#{btn.update}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="system:menu:remove">
+        <input type="hidden" name="hidden_remove" th:value="#{btn.remove}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="system:menu:save">
+        <input type="hidden" name="hidden_save" th:value="#{btn.save}"/>
+    </shiro:hasPermission>
+
+    <!--widget-->
+    <div id="system_menu_widget" class="widget-box">
+        <!--head-->
+        <div class="widget-header widget-header-small">
+            <div class="widget-toolbar">
+                <a href="#" data-action="fullscreen">
+                    <i class="ace-icon fa fa-expand info bigger-125"></i>
+                </a>
+            </div>
+        </div><!--/.widget-header-->
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <!--query-->
+                <!--toolbar-->
+                <div id="system_menu_toolbar">
+                    <button shiro:hasPermission="system:menu:batchRemove" class="btn btn-danger btn-sm"
+                            th:title="#{btn.batchRemove}"
+                            onclick="systemMenuBatchRemove();">
+                        <i class="ace-icon glyphicon glyphicon-remove"></i>
+                        <span th:text="#{btn.batchRemove}"></span>
+                    </button>
+                    <button shiro:hasPermission="system:menu:save" class="btn btn-success btn-sm"
+                            th:title="#{btn.save}"
+                            data-toggle="modal" data-target="#system_menu_dialog" href="/system/menu/add/0">
+                        <i class="ace-icon glyphicon glyphicon-plus"></i>
+                        <span th:text="#{btn.save}"></span>
+                    </button>
+                </div>
+
+                <!--table-->
+                <table id="system_menu_table" class="table" data-show-jumpto="true">
+                    <thead>
+                    <tr>
+                        <!--<th data-valign="middle"></th>-->
+                        <th data-field="name" data-valign="middle"><span th:text="#{system.menu.name}"></span></th>
+                        <th data-field="url" data-valign="middle"><span th:text="#{system.menu.url}"></span></th>
+                        <th data-field="permission" data-valign="middle"><span th:text="#{system.menu.permission}"></span></th>
+                        <th data-field="orders" data-valign="middle"><span th:text="#{system.menu.orders}"></span></th>
+                        <th data-field="gmtCreate" data-valign="middle"><span th:text="#{system.menu.gmtCreate}"></span></th>
+                        <th data-field="gmtModified" data-valign="middle"><span th:text="#{system.menu.gmtModified}"></span></th>
+                        <th data-field="id" data-valign="middle"><span></span></th>
+                    </tr>
+                    </thead>
+                </table>
+
+            </div><!--/.widget-main-->
+        </div><!--/.widget-body-->
+    </div>
+
+    <!--dialog-->
+    <div id="system_menu_dialog" class="modal" tabindex="-1" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="js/app/system/menu/main.js"></script>

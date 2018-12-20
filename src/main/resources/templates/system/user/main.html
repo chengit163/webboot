@@ -1,0 +1,260 @@
+<div id="system_user_content">
+
+    <input type="hidden" name="hidden_label" th:value="#{system.user}"/>
+    <!--permission-->
+    <shiro:hasPermission name="system:user:get">
+        <input type="hidden" name="hidden_get" th:value="#{btn.get}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="system:user:update">
+        <input type="hidden" name="hidden_update" th:value="#{btn.update}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="system:user:remove">
+        <input type="hidden" name="hidden_remove" th:value="#{btn.remove}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="rabc:user:role:get">
+        <input type="hidden" name="hidden_getPermission" th:value="#{btn.getPermission}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="system:user:password">
+        <input type="hidden" name="hidden_password" th:value="#{btn.password}"/>
+    </shiro:hasPermission>
+
+    <!--widget-->
+    <div id="system_user_widget" class="widget-box">
+        <!--head-->
+        <div class="widget-header widget-header-small">
+            <div class="widget-toolbar">
+                <a href="#" data-action="fullscreen">
+                    <i class="ace-icon fa fa-expand info bigger-125"></i>
+                </a>
+            </div>
+            <div class="widget-toolbar no-border">
+                <label>
+                    <input id="system_user_query_switch" type="checkbox" class="ace ace-switch ace-switch-2">
+                    <span class="lbl middle"></span>
+                </label>
+            </div>
+        </div><!--/.widget-header-->
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <!--query-->
+                <div id="system_user_query_box" class="widget-box transparent">
+                    <div class="widget-body" style="display: none;">
+                        <div class="widget-main clearfix">
+                            <!--form-->
+                            <form id="system_user_form" class="form-horizontal">
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{system.user.username}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="username" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{system.user.nickname}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="nickname" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{system.user.phone}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="phone" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{system.user.email}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="email" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{system.user.lastLoginIp}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="lastLoginIp" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{system.user.userIdCreate}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="number" name="userIdCreate" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{system.user.status}"></label>
+                                    <div class="col-sm-8">
+                                        <select name="status" class="form-control">
+                                            <option value="">-----</option>
+                                            <option value="0">锁定</option>
+                                            <option value="1">可用</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--reset & search-->
+                        <div class="widget-toolbox clearfix" style="text-align: center;">
+                            <button id="system_user_reset" type="button" class="btn btn-grey btn-sm">
+                                <i class="ace-icon fa fa-undo icon-on-right"></i>
+                                &nbsp;&nbsp;&nbsp;<span th:text="#{btn.reset}"></span>&nbsp;&nbsp;&nbsp;
+                            </button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="system_user_search" type="button" class="btn btn-purple btn-sm">
+                                <i class="ace-icon fa fa-search icon-on-right"></i>
+                                &nbsp;&nbsp;&nbsp;<span th:text="#{btn.search}"></span>&nbsp;&nbsp;&nbsp;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--toolbar-->
+                <div id="system_user_toolbar">
+                    <button shiro:hasPermission="system:user:batchRemove" class="btn btn-danger btn-sm"
+                            th:title="#{btn.batchRemove}"
+                            onclick="systemUserBatchRemove()">
+                        <i class="ace-icon glyphicon glyphicon-remove"></i>
+                        <span th:text="#{btn.batchRemove}"></span>
+                    </button>
+                    <button shiro:hasPermission="system:user:save" class="btn btn-success btn-sm"
+                            th:title="#{btn.save}"
+                            data-toggle="modal" data-target="#system_user_dialog" href="/system/user/add">
+                        <i class="ace-icon glyphicon glyphicon-plus"></i>
+                        <span th:text="#{btn.save}"></span>
+                    </button>
+                    <button shiro:hasPermission="system:user:export" class="btn btn-inverse btn-sm"
+                            th:title="#{btn.export}"
+                            onclick="systemUserExport()">
+                        <i class="ace-icon fa fa-download"></i>
+                        <span th:text="#{btn.export}"></span>
+                    </button>
+                    <button shiro:hasPermission="system:user:import" class="btn btn-grey btn-sm"
+                            th:title="#{btn.import}"
+                            onclick="systemUserImport()">
+                        <i class="ace-icon fa fa-upload"></i>
+                        <span th:text="#{btn.import}"></span>
+                    </button>
+                </div>
+
+                <!--table-->
+                <table id="system_user_table" class="table" data-show-jumpto="true">
+                    <thead>
+                    <tr>
+                        <th data-valign="middle"></th>
+                        <th data-field="username" data-valign="middle"><span th:text="#{system.user.username}"></span></th>
+                        <th data-field="nickname" data-valign="middle"><span th:text="#{system.user.nickname}"></span></th>
+                        <th data-field="phone" data-valign="middle"><span th:text="#{system.user.phone}"></span></th>
+                        <th data-field="email" data-valign="middle"><span th:text="#{system.user.email}"></span></th>
+                        <th data-field="lastLoginTime" data-valign="middle"><span th:text="#{system.user.lastLoginTime}"></span></th>
+                        <th data-field="lastLoginIp" data-valign="middle"><span th:text="#{system.user.lastLoginIp}"></span></th>
+                        <th data-field="userIdCreate" data-valign="middle"><span th:text="#{system.user.userIdCreate}"></span></th>
+                        <th data-field="status" data-valign="middle"><span th:text="#{system.user.status}"></span></th>
+                        <th data-field="gmtCreate" data-valign="middle"><span th:text="#{system.user.gmtCreate}"></span></th>
+                        <th data-field="gmtModified" data-valign="middle"><span th:text="#{system.user.gmtModified}"></span></th>
+                        <th data-field="id" data-valign="middle"><span></span></th>
+                    </tr>
+                    </thead>
+                </table>
+
+            </div><!--/.widget-main-->
+        </div><!--/.widget-body-->
+    </div>
+
+    <!--dialog-->
+    <div id="system_user_dialog" class="modal" tabindex="-1" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+    <!--dialogs-->
+    <div id="system_user_dialogs" class="modal fade" tabindex="-1" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog">
+
+            <div shiro:hasPermission="system:user:export" name="export" class="modal-content hidden">
+                <!--导出-->
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button type="button" class="close" data-dismiss="modal"><span class="white">&times;</span>
+                        </button>
+                        <div>
+                            <i class="ace-icon fa fa-download"></i>
+                            &nbsp;<span th:text="#{btn.export}+#{system.user}+'Excel'"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body no-padding">
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-sm" data-dismiss="modal"
+                            th:text="#{confirm.btn.cancel}"></button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="javascript:systemUserExportExe()"
+                            th:text="#{confirm.btn.ok}"></button>
+                </div>
+            </div>
+
+            <div shiro:hasPermission="system:user:import" name="import" class="modal-content hidden">
+                <!--导入-->
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button type="button" class="close" data-dismiss="modal"><span class="white">&times;</span>
+                        </button>
+                        <div>
+                            <i class="ace-icon fa fa-upload"></i>
+                            &nbsp;<span th:text="#{btn.import}+#{system.user}+'Excel'"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="system_user_excel_form" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <span class="block input-icon input-icon-right">
+                                    <input id="file" type="file" name="file" class="form-control"/>
+                                </span>
+                            </div>
+                            <div class="col-xs-12 inline"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-sm" data-dismiss="modal"
+                            th:text="#{confirm.btn.cancel}"></button>
+                    <button type="button" class="btn btn-sm btn-info"
+                            onclick="javascript:window.open(encodeURI('/system/user/template'))"
+                            th:text="#{confirm.btn.download.template}"></button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="javascript:systemUserImportExe()"
+                            th:text="#{confirm.btn.ok}"></button>
+                </div>
+            </div>
+
+            <div shiro:hasPermission="system:user:import" name="doing" class="modal-content hidden">
+                <!--doing-->
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button name="close" type="button" class="close" data-dismiss="modal"><span class="white">&times;</span>
+                        </button>
+                        <div name="waiting">
+                            <i class="ace-icon fa fa-spinner fa-spin white"></i>
+                            &nbsp;<span th:text="#{label.waiting}"></span>
+                        </div>
+                        <div name="success">
+                            <i class="ace-icon fa fa-check green"></i>
+                            &nbsp;<span th:text="#{label.success}"></span>
+                        </div>
+                        <div name="failed">
+                            <i class="ace-icon fa fa-close red"></i>
+                            &nbsp;<span th:text="#{label.failed}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p class="center"><h5 id="tips"></h5></p>
+                </div>
+            </div>
+
+        </div>
+    </div><!--/common_log_dialogs-->
+
+</div>
+
+<script src="js/app/system/user/main.js"></script>

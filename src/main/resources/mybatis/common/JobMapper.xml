@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cit.web.common.dao.JobDao">
+    <!--结果集-->
+    <resultMap id="jobResultMap" type="com.cit.web.common.entity.Job">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="job_class" jdbcType="VARCHAR" property="jobClass"/>
+        <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <!--查询数量-->
+    <select id="count" resultType="int">
+        SELECT COUNT(0)
+        FROM sys_job
+        <where>
+          <if test="id != null and id.trim() != ''">and `id` = #{id}</if>
+          <if test="jobClass != null and jobClass.trim() != ''">and `job_class` = #{jobClass}</if>
+          <if test="cronExpression != null and cronExpression.trim() != ''">and `cron_expression` = #{cronExpression}</if>
+          <if test="description != null and description.trim() != ''">and `description` = #{description}</if>
+          <if test="status != null and status.trim() != ''">and `status` = #{status}</if>
+          <if test="gmtCreate != null and gmtCreate.trim() != ''">and `gmt_create` = #{gmtCreate}</if>
+          <if test="gmtModified != null and gmtModified.trim() != ''">and `gmt_modified` = #{gmtModified}</if>
+        </where>
+    </select>
+
+    <!--查询列表-->
+    <select id="list" resultMap="jobResultMap">
+        SELECT
+        `id`,
+        `job_class`,
+        `cron_expression`,
+        `description`,
+        `status`,
+        `gmt_create`,
+        `gmt_modified`
+        FROM sys_job
+        <where>
+            <if test="id != null and id.trim() != ''">and `id` = #{id}</if>
+            <if test="jobClass != null and jobClass.trim() != ''">and `job_class` = #{jobClass}</if>
+            <if test="cronExpression != null and cronExpression.trim() != ''">and `cron_expression` = #{cronExpression}</if>
+            <if test="description != null and description.trim() != ''">and `description` = #{description}</if>
+            <if test="status != null and status.trim() != ''">and `status` = #{status}</if>
+            <if test="gmtCreate != null and gmtCreate.trim() != ''">and `gmt_create` = #{gmtCreate}</if>
+            <if test="gmtModified != null and gmtModified.trim() != ''">and `gmt_modified` = #{gmtModified}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY `${sort}` ${order}
+            </when>
+            <otherwise>
+                ORDER BY `id` ${order}
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--获取-->
+    <select id="get" resultMap="jobResultMap">
+        SELECT
+        `id`,
+        `job_class`,
+        `cron_expression`,
+        `description`,
+        `status`,
+        `gmt_create`,
+        `gmt_modified`
+        FROM sys_job
+        WHERE `id` = #{id}
+    </select>
+
+    <!--插入-->
+    <insert id="save" parameterType="com.cit.web.common.entity.Job" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_job
+        (
+        `job_class`,
+        `cron_expression`,
+        `description`,
+        `status`,
+        `gmt_create`,
+        `gmt_modified`
+        )
+        VALUES
+        (
+        #{jobClass},
+        #{cronExpression},
+        #{description},
+        #{status},
+        #{gmtCreate},
+        #{gmtModified}
+        )
+    </insert>
+
+    <!--更新-->
+    <update id="update" parameterType="com.cit.web.common.entity.Job">
+        UPDATE sys_job
+        <set>
+          <if test="jobClass != null">`job_class` = #{jobClass},</if>
+          <if test="cronExpression != null">`cron_expression` = #{cronExpression},</if>
+          <if test="description != null">`description` = #{description},</if>
+          <if test="status != null">`status` = #{status},</if>
+          <if test="gmtCreate != null">`gmt_create` = #{gmtCreate},</if>
+          <if test="gmtModified != null">`gmt_modified` = #{gmtModified},</if>
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <!--删除-->
+    <delete id="remove">
+        DELETE FROM sys_job WHERE `id` = #{id}
+    </delete>
+
+    <!--批量删除-->
+    <delete id="batchRemove">
+        DELETE FROM sys_job WHERE `id` IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--批量插入-->
+    <insert id="batchSave" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_job
+        (
+        `job_class`,
+        `cron_expression`,
+        `description`,
+        `status`,
+        `gmt_create`,
+        `gmt_modified`
+        )
+        VALUES
+        <foreach collection="jobs" item="job" separator=",">
+        (
+        #{job.jobClass},
+        #{job.cronExpression},
+        #{job.description},
+        #{job.status},
+        #{job.gmtCreate},
+        #{job.gmtModified}
+        )
+        </foreach>
+    </insert>
+
+</mapper>

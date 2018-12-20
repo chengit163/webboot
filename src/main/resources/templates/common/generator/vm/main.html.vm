@@ -1,0 +1,224 @@
+<div id="${module}_${table.fieldName}_content">
+
+    <input type="hidden" name="hidden_label" th:value="#{${module}.${table.fieldName}}"/>
+    <!--permission-->
+    <shiro:hasPermission name="${module}:${table.fieldName}:get">
+        <input type="hidden" name="hidden_get" th:value="#{btn.get}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="${module}:${table.fieldName}:update">
+        <input type="hidden" name="hidden_update" th:value="#{btn.update}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="${module}:${table.fieldName}:remove">
+        <input type="hidden" name="hidden_remove" th:value="#{btn.remove}"/>
+    </shiro:hasPermission>
+
+    <!--widget-->
+    <div id="${module}_${table.fieldName}_widget" class="widget-box">
+        <!--head-->
+        <div class="widget-header widget-header-small">
+            <div class="widget-toolbar">
+                <a href="#" data-action="fullscreen">
+                    <i class="ace-icon fa fa-expand info bigger-125"></i>
+                </a>
+            </div>
+            <div class="widget-toolbar no-border">
+                <label>
+                    <input id="${module}_${table.fieldName}_query_switch" type="checkbox" class="ace ace-switch ace-switch-2">
+                    <span class="lbl middle"></span>
+                </label>
+            </div>
+        </div><!--/.widget-header-->
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <!--query-->
+                <div id="${module}_${table.fieldName}_query_box" class="widget-box transparent">
+                    <div class="widget-body" style="display: none;">
+                        <div class="widget-main clearfix">
+                            <!--form-->
+                            <form id="${module}_${table.fieldName}_form" class="form-horizontal">
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName && $column.javaType != 'java.util.Date')
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{${module}.${table.fieldName}.${column.fieldName}}"></label>
+                                    <div class="col-sm-8">
+#if($column.options)
+                                        <select name="${column.fieldName}" class="form-control">
+                                            <option value="">-----</option>
+#foreach ($option in $column.options)
+                                            <option value="${option.key}">${option.value}</option>
+#end
+                                        </select>
+#elseif ($column.javaType == 'Integer' || $column.javaType == 'Long' || $column.javaType == 'Float' || $column.javaType == 'Double')
+                                        <input type="number" name="${column.fieldName}" class="form-control"/>
+#else
+                                        <input type="text" name="${column.fieldName}" class="form-control"/>
+#end
+                                    </div>
+                                </div>
+#end
+#end
+                            </form>
+                        </div>
+                        <!--reset & search-->
+                        <div class="widget-toolbox clearfix" style="text-align: center;">
+                            <button id="${module}_${table.fieldName}_reset" type="button" class="btn btn-grey btn-sm">
+                                <i class="ace-icon fa fa-undo icon-on-right"></i>
+                                &nbsp;&nbsp;&nbsp;<span th:text="#{btn.reset}"></span>&nbsp;&nbsp;&nbsp;
+                            </button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="${module}_${table.fieldName}_search" type="button" class="btn btn-purple btn-sm">
+                                <i class="ace-icon fa fa-search icon-on-right"></i>
+                                &nbsp;&nbsp;&nbsp;<span th:text="#{btn.search}"></span>&nbsp;&nbsp;&nbsp;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--toolbar-->
+                <div id="${module}_${table.fieldName}_toolbar">
+                    <button shiro:hasPermission="${module}:${table.fieldName}:batchRemove" class="btn btn-danger btn-sm"
+                            th:title="#{btn.batchRemove}"
+                            onclick="${module}${table.className}BatchRemove()">
+                        <i class="ace-icon glyphicon glyphicon-remove"></i>
+                        <span th:text="#{btn.batchRemove}"></span>
+                    </button>
+                    <button shiro:hasPermission="${module}:${table.fieldName}:save" class="btn btn-success btn-sm"
+                            th:title="#{btn.save}"
+                            data-toggle="modal" data-target="#${module}_${table.fieldName}_dialog" href="/${module}/${table.fieldName}/add">
+                        <i class="ace-icon glyphicon glyphicon-plus"></i>
+                        <span th:text="#{btn.save}"></span>
+                    </button>
+                    <button shiro:hasPermission="${module}:${table.fieldName}:export" class="btn btn-inverse btn-sm"
+                            th:title="#{btn.export}"
+                            onclick="${module}${table.className}Export()">
+                        <i class="ace-icon fa fa-download"></i>
+                        <span th:text="#{btn.export}"></span>
+                    </button>
+                    <button shiro:hasPermission="${module}:${table.fieldName}:import" class="btn btn-grey btn-sm"
+                            th:title="#{btn.import}"
+                            onclick="${module}${table.className}Import()">
+                        <i class="ace-icon fa fa-upload"></i>
+                        <span th:text="#{btn.import}"></span>
+                    </button>
+                </div>
+
+                <!--table-->
+                <table id="${module}_${table.fieldName}_table" class="table" data-show-jumpto="true">
+                    <thead>
+                    <tr>
+                        <th data-valign="middle"></th>
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName)
+                        <th data-field="${column.fieldName}" data-valign="middle"><span th:text="#{${module}.${table.fieldName}.${column.fieldName}}"></span></th>
+#end
+#end
+                        <th data-field="${pk.fieldName}" data-valign="middle"><span></span></th>
+                    </tr>
+                    </thead>
+                </table>
+
+            </div><!--/.widget-main-->
+        </div><!--/.widget-body-->
+    </div>
+
+    <!--dialog-->
+    <div id="${module}_${table.fieldName}_dialog" class="modal" tabindex="-1" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div><!--/dialog-->
+
+    <!--dialogs-->
+    <div id="${module}_${table.fieldName}_dialogs" class="modal fade" tabindex="-1" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog">
+
+            <div shiro:hasPermission="${module}:${table.fieldName}:export" name="export" class="modal-content hidden">
+                <!--导出-->
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button type="button" class="close" data-dismiss="modal"><span class="white">&times;</span>
+                        </button>
+                        <div>
+                            <i class="ace-icon fa fa-download"></i>
+                            &nbsp;<span th:text="#{btn.export}+#{${module}.${table.fieldName}}+'Excel'"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body no-padding">
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-sm" data-dismiss="modal"
+                            th:text="#{confirm.btn.cancel}"></button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="javascript:${module}${table.className}ExportExe()"
+                            th:text="#{confirm.btn.ok}"></button>
+                </div>
+            </div>
+
+            <div shiro:hasPermission="${module}:${table.fieldName}:import" name="import" class="modal-content hidden">
+                <!--导入-->
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button type="button" class="close" data-dismiss="modal"><span class="white">&times;</span>
+                        </button>
+                        <div>
+                            <i class="ace-icon fa fa-upload"></i>
+                            &nbsp;<span th:text="#{btn.import}+#{${module}.${table.fieldName}}+'Excel'"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="${module}_${table.fieldName}_excel_form" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <span class="block input-icon input-icon-right">
+                                    <input id="file" type="file" name="file" class="form-control"/>
+                                </span>
+                            </div>
+                            <div class="col-xs-12 inline"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-sm" data-dismiss="modal"
+                            th:text="#{confirm.btn.cancel}"></button>
+                    <button type="button" class="btn btn-sm btn-info"
+                            onclick="javascript:window.open(encodeURI('/${module}/${table.fieldName}/template'))"
+                            th:text="#{confirm.btn.download.template}"></button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="javascript:${module}${table.className}ImportExe()"
+                            th:text="#{confirm.btn.ok}"></button>
+                </div>
+            </div>
+
+            <div shiro:hasPermission="${module}:${table.fieldName}:import" name="doing" class="modal-content hidden">
+                <!--doing-->
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button name="close" type="button" class="close" data-dismiss="modal"><span class="white">&times;</span>
+                        </button>
+                        <div name="waiting">
+                            <i class="ace-icon fa fa-spinner fa-spin white"></i>
+                            &nbsp;<span th:text="#{label.waiting}"></span>
+                        </div>
+                        <div name="success">
+                            <i class="ace-icon fa fa-check green"></i>
+                            &nbsp;<span th:text="#{label.success}"></span>
+                        </div>
+                        <div name="failed">
+                            <i class="ace-icon fa fa-close red"></i>
+                            &nbsp;<span th:text="#{label.failed}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p class="center"><h5 id="tips"></h5></p>
+                </div>
+            </div>
+
+        </div>
+    </div><!--/dialogs-->
+
+</div>
+
+<script src="js/app/${module}/${table.fieldName}/main.js"></script>

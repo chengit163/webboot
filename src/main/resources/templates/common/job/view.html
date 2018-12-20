@@ -1,0 +1,54 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger" th:text="#{label.view}+#{common.job}"></h5>
+</div>
+
+<div class="modal-body">
+    <div class="profile-user-info profile-user-info-striped">
+
+        <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{common.job.jobClass}"></div>
+            <div class="profile-info-value">
+                <span th:text="${job.jobClass}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{common.job.cronExpression}"></div>
+            <div class="profile-info-value">
+                <span th:text="${job.cronExpression}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{common.job.description}"></div>
+            <div class="profile-info-value">
+                <span th:text="${job.description}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{common.job.status}"></div>
+            <div class="profile-info-value" th:switch="${job.status}">
+                <span th:case="0">关闭</span>
+                <span th:case="1">启动</span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{common.job.gmtCreate}"></div>
+            <div class="profile-info-value">
+                <span th:text="${job.gmtCreate}?${#dates.format(job.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{common.job.gmtModified}"></div>
+            <div class="profile-info-value">
+                <span th:text="${job.gmtModified}?${#dates.format(job.gmtModified,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+     </div>
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+    </div>
+</div>

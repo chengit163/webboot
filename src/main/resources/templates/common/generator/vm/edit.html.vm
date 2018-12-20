@@ -1,0 +1,47 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger" th:text="#{label.edit}+#{${module}.${table.fieldName}}"></h5>
+</div>
+
+<div class="modal-body">
+    <form id="${module}_${table.fieldName}_edit_form" class="form-horizontal">
+        <input type="hidden" name="${pk.fieldName}" th:value="${${table.fieldName}.${pk.fieldName}}"/>
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName && $column.javaType != 'java.util.Date')
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 control-label no-padding-right" th:text="#{${module}.${table.fieldName}.${column.fieldName}}"></label>
+            <div class="col-xs-12 col-sm-6">
+                <span class="block input-icon input-icon-right">
+#if($column.options)
+                    <select name="${column.fieldName}" class="form-control">
+                        <option value="">-----</option>
+#foreach ($option in $column.options)
+                        <option th:selected="${${table.fieldName}.${column.fieldName} == ${option.key}}" value="${option.key}">${option.value}</option>
+#end
+                    </select>
+#elseif ($column.javaType == 'Integer' || $column.javaType == 'Long' || $column.javaType == 'Float' || $column.javaType == 'Double')
+                    <input type="number" name="${column.fieldName}" th:value="${${table.fieldName}.${column.fieldName}}" class="form-control"/>
+#else
+                    <input type="text" name="${column.fieldName}" th:value="${${table.fieldName}.${column.fieldName}}" class="form-control"/>
+#end
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-3 inline"></div>
+        </div>
+#end
+#end
+    </form>
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+        <button class="btn btn-sm btn-primary" onclick="${module}${table.className}Edit();">
+            <i class="ace-icon fa fa-check"></i>
+            <span th:text="#{confirm.btn.save}"></span>
+        </button>
+    </div>
+</div>
+
+<script src="js/app/${module}/${table.fieldName}/edit.js"></script>

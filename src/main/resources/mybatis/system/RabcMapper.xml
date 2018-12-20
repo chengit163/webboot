@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cit.web.system.dao.RabcDao">
+
+    <!--结果集-->
+    <resultMap id="rabcResultMap" type="com.cit.web.system.entity.Rabc">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="pid" jdbcType="INTEGER" property="pid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="orders" jdbcType="INTEGER" property="orders"/>
+    </resultMap>
+
+    <!--根据用户ID查询权限-->
+    <select id="listPermissionByUserId" resultType="string">
+        SELECT DISTINCT
+        TRIM(t1.permission)
+        FROM sys_menu t1
+        LEFT JOIN sys_role_menu t2 ON t1.id = t2.menu_id
+        LEFT JOIN sys_user_role t3 ON t2.role_id = t3.role_id
+        WHERE t1.permission IS NOT NULL AND t1.permission != ''
+        AND t3.user_id = #{userId}
+    </select>
+
+    <!--根据用户ID查询菜单-->
+    <select id="listMenuByUserId" resultMap="rabcResultMap">
+        SELECT DISTINCT
+        t1.id,
+        t1.pid,
+        t1.name,
+        t1.url,
+        t1.icon,
+        t1.type,
+        t1.orders
+        FROM sys_menu t1
+        LEFT JOIN sys_role_menu t2 ON t1.id = t2.menu_id
+        LEFT JOIN sys_user_role t3 ON t2.role_id = t3.role_id
+        WHERE t3.user_id = #{userId}
+        AND t1.type IN (-1, 0, 1)
+    </select>
+
+    <!---->
+    <!--获取所有菜单选项-->
+    <select id="getMenuOptions" resultMap="rabcResultMap">
+        SELECT id, pid, name FROM sys_menu
+    </select>
+
+    <!--根据角色id获取所拥有的资源ids-->
+    <select id="getMenuIdsByRoleId" resultType="integer">
+        SELECT DISTINCT
+        t1.id
+        FROM sys_menu t1
+        LEFT JOIN sys_role_menu t2 ON t1.id = t2.menu_id
+        WHERE t2.role_id = #{roleId}
+    </select>
+
+    <!--删除角色对应的资源关系-->
+    <delete id="removeMenuIdsByRoleId">
+        DELETE FROM sys_role_menu WHERE role_id = #{roleId}
+    </delete>
+
+    <!--插入角色对应的资源关系-->
+    <insert id="saveMenuIdsByRoleId">
+        INSERT INTO sys_role_menu
+        (role_id, menu_id)
+        VALUES
+        <foreach collection="menuIds" item="menuId" separator=",">
+            (#{roleId}, #{menuId})
+        </foreach>
+    </insert>
+
+    <!---->
+    <!--获取所有角色选项-->
+    <select id="getRoleOptions" resultMap="rabcResultMap">
+        SELECT id, 0 AS pid, name FROM sys_role
+    </select>
+
+    <!--根据用户id获取所有拥有的角色ids-->
+    <select id="getRoleIdsByUserId" resultType="integer">
+        SELECT DISTINCT
+        t1.id
+        FROM sys_role t1
+        LEFT JOIN sys_user_role t2 ON t1.id = t2.role_id
+        WHERE t2.user_id = #{userId}
+    </select>
+
+    <!--删除用户对应的角色关系-->
+    <delete id="removeRoleIdsByUserId">
+        DELETE FROM sys_user_role WHERE user_id = #{userId}
+    </delete>
+
+    <!--插入用户对应的角色关系-->
+    <insert id="saveRoleIdsByUserId">
+        INSERT INTO sys_user_role
+        (user_id, role_id)
+        VALUES
+        <foreach collection="roleIds" item="roleId" separator=",">
+            (#{userId}, #{roleId})
+        </foreach>
+    </insert>
+
+</mapper>

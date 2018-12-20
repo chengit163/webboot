@@ -1,0 +1,56 @@
+[
+  {
+    "name": "jQuery",
+    "desc": "JS代码库",
+    "github": "https://github.com/jquery/jquery",
+    "home": "http://jquery.com"
+  },
+  {
+    "name": "Bootstrap",
+    "desc": "前端开发框架",
+    "github": "https://github.com/twbs/bootstrap",
+    "home": "http://www.bootcss.com"
+  },
+  {
+    "name": "Bootstrap Table",
+    "desc": "表格组件",
+    "github": "https://github.com/wenzhixin/bootstrap-table",
+    "home": "http://bootstrap-table.wenzhixin.net.cn"
+  },
+  {
+    "name": "Bootbox",
+    "desc": "提示插件",
+    "github": "https://github.com/makeusabrew/bootbox",
+    "home": "http://bootboxjs.com"
+  },
+  {
+    "name": "Toastr",
+    "desc": "通知插件",
+    "github": "https://github.com/CodeSeven/toastr",
+    "home": "http://www.toastrjs.com"
+  },
+  {
+    "name": "BootstrapValidator",
+    "desc": "表单验证插件",
+    "github": "https://github.com/nghuuphuoc/bootstrapvalidator",
+    "home": "https://formvalidation.io"
+  },
+  {
+    "name": "zTree_v3",
+    "desc": "jQuery树插件",
+    "github": "https://github.com/zTree/zTree_v3",
+    "home": "http://www.treejs.cn/v3/main.php"
+  },
+  {
+    "name": "layer",
+    "desc": "弹出层",
+    "github": "https://github.com/sentsin/layer",
+    "home": "http://layer.layui.com"
+  },
+  {
+    "name": "layDate",
+    "desc": "日期和时间组件",
+    "github": "https://github.com/sentsin/laydate",
+    "home": "http://www.layui.com/laydate"
+  }
+]

@@ -1,0 +1,78 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger" th:text="#{label.view}+#{system.user}"></h5>
+</div>
+
+<div class="modal-body">
+    <div class="profile-user-info profile-user-info-striped">
+
+        <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.user.username}"></div>
+            <div class="profile-info-value">
+                <span th:text="${user.username}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.user.nickname}"></div>
+            <div class="profile-info-value">
+                <span th:text="${user.nickname}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.user.phone}"></div>
+            <div class="profile-info-value">
+                <span th:text="${user.phone}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.user.email}"></div>
+            <div class="profile-info-value">
+                <span th:text="${user.email}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.user.lastLoginTime}"></div>
+            <div class="profile-info-value">
+                <span th:text="${user.lastLoginTime}?${#dates.format(user.lastLoginTime,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.user.lastLoginIp}"></div>
+            <div class="profile-info-value">
+                <span th:text="${user.lastLoginIp}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.user.userIdCreate}"></div>
+            <div class="profile-info-value">
+                <span th:text="${user.userIdCreate}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.user.status}"></div>
+            <div class="profile-info-value" th:switch="${user.status}">
+                <span th:case="0">锁定</span>
+                <span th:case="1">可用</span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.user.gmtCreate}"></div>
+            <div class="profile-info-value">
+                <span th:text="${user.gmtCreate}?${#dates.format(user.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.user.gmtModified}"></div>
+            <div class="profile-info-value">
+                <span th:text="${user.gmtModified}?${#dates.format(user.gmtModified,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+     </div>
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+    </div>
+</div>

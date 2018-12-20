@@ -1,0 +1,56 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger" th:text="#{label.add}+#{common.job}"></h5>
+</div>
+
+<div class="modal-body">
+    <form id="common_job_add_form" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 control-label no-padding-right" th:text="#{common.job.jobClass}"></label>
+            <div class="col-xs-12 col-sm-6">
+                <span class="block input-icon input-icon-right">
+                    <select name="jobClass" class="form-control">
+                        <option value="">-----</option>
+                        <option th:each="executeJob : ${executeJobs}" th:value="${executeJob.executeClass}" th:title="${executeJob.executeClass}" th:text="${executeJob.executeName}"></option>
+                    </select>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-3 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 control-label no-padding-right" th:text="#{common.job.cronExpression}"></label>
+            <div class="col-xs-12 col-sm-6">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="cronExpression" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-3 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 control-label no-padding-right" th:text="#{common.job.description}"></label>
+            <div class="col-xs-12 col-sm-6">
+                <span class="block input-icon input-icon-right">
+                    <textarea name="description" class="form-control"></textarea>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-3 inline"></div>
+        </div>
+    </form>
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+        <button class="btn btn-sm btn-info" onclick="commonJobAddReset();">
+            <i class="ace-icon fa fa-undo"></i>
+            <span th:text="#{confirm.btn.reset}"></span>
+        </button>
+        <button class="btn btn-sm btn-primary" onclick="commonJobAddSave();">
+            <i class="ace-icon fa fa-check"></i>
+            <span th:text="#{confirm.btn.save}"></span>
+        </button>
+    </div>
+</div>
+
+<script src="js/app/common/job/add.js"></script>

@@ -1,0 +1,39 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger" th:text="#{label.view}+#{${module}.${table.fieldName}}"></h5>
+</div>
+
+<div class="modal-body">
+    <div class="profile-user-info profile-user-info-striped">
+
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName)
+        <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{${module}.${table.fieldName}.${column.fieldName}}"></div>
+#if($column.options)
+            <div class="profile-info-value" th:switch="${${table.fieldName}.${column.fieldName}}">
+#foreach ($option in $column.options)
+                <span th:case="${option.key}">${option.value}</span>
+#end
+            </div>
+#else
+            <div class="profile-info-value">
+#if ($column.javaType == 'java.util.Date')
+                <span th:text="${${table.fieldName}.${column.fieldName}}?${#dates.format(${table.fieldName}.${column.fieldName},'yyyy-MM-dd HH:mm:ss')}"></span>
+#else
+                <span th:text="${${table.fieldName}.${column.fieldName}}"></span>
+#end
+            </div>
+#end
+        </div>
+ #end
+#end
+    </div>
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+    </div>
+</div>

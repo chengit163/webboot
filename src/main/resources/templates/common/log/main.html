@@ -1,0 +1,278 @@
+<div id="common_log_content">
+
+    <input type="hidden" name="hidden_label" th:value="#{common.log}"/>
+    <!--permission-->
+    <shiro:hasPermission name="common:log:get">
+        <input type="hidden" name="hidden_get" th:value="#{btn.get}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="common:log:update">
+        <input type="hidden" name="hidden_update" th:value="#{btn.update}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="common:log:remove">
+        <input type="hidden" name="hidden_remove" th:value="#{btn.remove}"/>
+    </shiro:hasPermission>
+
+    <!--widget-->
+    <div id="common_log_widget" class="widget-box">
+        <!--head-->
+        <div class="widget-header widget-header-small">
+            <div class="widget-toolbar">
+                <a href="#" data-action="fullscreen">
+                    <i class="ace-icon fa fa-expand info bigger-125"></i>
+                </a>
+            </div>
+            <div class="widget-toolbar no-border">
+                <label>
+                    <input id="common_log_query_switch" type="checkbox" class="ace ace-switch ace-switch-2">
+                    <span class="lbl middle"></span>
+                </label>
+            </div>
+        </div><!--/.widget-header-->
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <!--query-->
+                <div id="common_log_query_box" class="widget-box transparent">
+                    <div class="widget-body" style="display: none;">
+                        <div class="widget-main clearfix">
+                            <!--form-->
+                            <form id="common_log_form" class="form-horizontal">
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{common.log.username}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="username" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{common.log.ip}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="ip" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{common.log.action}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="action" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{common.log.url}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="url" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{common.log.method}"></label>
+                                    <div class="col-sm-8">
+                                        <select name="method" class="form-control">
+                                            <option value="">-----</option>
+                                            <option value="-1">UNKNOWN</option>
+                                            <option value="0">GET</option>
+                                            <option value="1">POST</option>
+                                            <option value="2">PUT</option>
+                                            <option value="3">DELETE</option>
+                                            <option value="4">HEADER</option>
+                                            <option value="5">OPTIONS</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{common.log.args}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="args" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{common.log.func}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="func" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{common.log.os}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="os" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{common.log.browser}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" name="browser" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-12 col-sm-6">
+                                    <label class="col-sm-4 control-label" th:text="#{common.log.cost}"></label>
+                                    <div class="col-sm-8">
+                                        <input type="number" name="cost" class="form-control"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!--reset & search-->
+                        <div class="widget-toolbox clearfix" style="text-align: center;">
+                            <button id="common_log_reset" type="button" class="btn btn-grey btn-sm">
+                                <i class="ace-icon fa fa-undo icon-on-right"></i>
+                                &nbsp;&nbsp;&nbsp;<span th:text="#{btn.reset}"></span>&nbsp;&nbsp;&nbsp;
+                            </button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="common_log_search" type="button" class="btn btn-purple btn-sm">
+                                <i class="ace-icon fa fa-search icon-on-right"></i>
+                                &nbsp;&nbsp;&nbsp;<span th:text="#{btn.search}"></span>&nbsp;&nbsp;&nbsp;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!--toolbar-->
+                <div id="common_log_toolbar">
+                    <button shiro:hasPermission="common:log:batchRemove" class="btn btn-danger btn-sm"
+                            th:title="#{btn.batchRemove}"
+                            onclick="commonLogBatchRemove()">
+                        <i class="ace-icon glyphicon glyphicon-remove"></i>
+                        <span th:text="#{btn.batchRemove}"></span>
+                    </button>
+                    <button shiro:hasPermission="common:log:save" class="btn btn-success btn-sm"
+                            th:title="#{btn.save}"
+                            data-toggle="modal" data-target="#common_log_dialog" href="/common/log/add">
+                        <i class="ace-icon glyphicon glyphicon-plus"></i>
+                        <span th:text="#{btn.save}"></span>
+                    </button>
+                    <button shiro:hasPermission="common:log:export" class="btn btn-inverse btn-sm"
+                            th:title="#{btn.export}"
+                            onclick="commonLogExport()">
+                        <i class="ace-icon fa fa-download"></i>
+                        <span th:text="#{btn.export}"></span>
+                    </button>
+                    <button shiro:hasPermission="common:log:import" class="btn btn-grey btn-sm"
+                            th:title="#{btn.import}"
+                            onclick="commonLogImport()">
+                        <i class="ace-icon fa fa-upload"></i>
+                        <span th:text="#{btn.import}"></span>
+                    </button>
+                </div>
+
+                <!--table-->
+                <table id="common_log_table" class="table" data-show-jumpto="true">
+                    <thead>
+                    <tr>
+                        <th data-valign="middle"></th>
+                        <th data-field="username" data-valign="middle"><span th:text="#{common.log.username}"></span></th>
+                        <th data-field="ip" data-valign="middle"><span th:text="#{common.log.ip}"></span></th>
+                        <th data-field="action" data-valign="middle"><span th:text="#{common.log.action}"></span></th>
+                        <th data-field="url" data-valign="middle"><span th:text="#{common.log.url}"></span></th>
+                        <th data-field="method" data-valign="middle"><span th:text="#{common.log.method}"></span></th>
+                        <th data-field="args" data-valign="middle"><span th:text="#{common.log.args}"></span></th>
+                        <th data-field="func" data-valign="middle"><span th:text="#{common.log.func}"></span></th>
+                        <th data-field="os" data-valign="middle"><span th:text="#{common.log.os}"></span></th>
+                        <th data-field="browser" data-valign="middle"><span th:text="#{common.log.browser}"></span></th>
+                        <th data-field="cost" data-valign="middle"><span th:text="#{common.log.cost}"></span></th>
+                        <th data-field="happen" data-valign="middle"><span th:text="#{common.log.happen}"></span></th>
+                        <th data-field="id" data-valign="middle"><span></span></th>
+                    </tr>
+                    </thead>
+                </table>
+
+            </div><!--/.widget-main-->
+        </div><!--/.widget-body-->
+    </div>
+
+    <!--dialog-->
+    <div id="common_log_dialog" class="modal" tabindex="-1" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div><!--/dialog-->
+
+    <!--dialogs-->
+    <div id="common_log_dialogs" class="modal fade" tabindex="-1" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog">
+
+            <div shiro:hasPermission="common:log:export" name="export" class="modal-content hidden">
+                <!--导出-->
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button type="button" class="close" data-dismiss="modal"><span class="white">&times;</span>
+                        </button>
+                        <div>
+                            <i class="ace-icon fa fa-download"></i>
+                            &nbsp;<span th:text="#{btn.export}+#{common.log}+'Excel'"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body no-padding">
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-sm" data-dismiss="modal"
+                            th:text="#{confirm.btn.cancel}"></button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="javascript:commonLogExportExe()"
+                            th:text="#{confirm.btn.ok}"></button>
+                </div>
+            </div>
+
+            <div shiro:hasPermission="common:log:import" name="import" class="modal-content hidden">
+                <!--导入-->
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button type="button" class="close" data-dismiss="modal"><span class="white">&times;</span>
+                        </button>
+                        <div>
+                            <i class="ace-icon fa fa-upload"></i>
+                            &nbsp;<span th:text="#{btn.import}+#{common.log}+'Excel'"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="common_log_excel_form" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <span class="block input-icon input-icon-right">
+                                    <input id="file" type="file" name="file" class="form-control"/>
+                                </span>
+                            </div>
+                            <div class="col-xs-12 inline"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer center">
+                    <button type="button" class="btn btn-sm" data-dismiss="modal"
+                            th:text="#{confirm.btn.cancel}"></button>
+                    <button type="button" class="btn btn-sm btn-info"
+                            onclick="javascript:window.open(encodeURI('/common/log/template'))"
+                            th:text="#{confirm.btn.download.template}"></button>
+                    <button type="button" class="btn btn-sm btn-primary" onclick="javascript:commonLogImportExe()"
+                            th:text="#{confirm.btn.ok}"></button>
+                </div>
+            </div>
+
+            <div shiro:hasPermission="common:log:import" name="doing" class="modal-content hidden">
+                <!--doing-->
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button name="close" type="button" class="close" data-dismiss="modal"><span class="white">&times;</span>
+                        </button>
+                        <div name="waiting">
+                            <i class="ace-icon fa fa-spinner fa-spin white"></i>
+                            &nbsp;<span th:text="#{label.waiting}"></span>
+                        </div>
+                        <div name="success">
+                            <i class="ace-icon fa fa-check green"></i>
+                            &nbsp;<span th:text="#{label.success}"></span>
+                        </div>
+                        <div name="failed">
+                            <i class="ace-icon fa fa-close red"></i>
+                            &nbsp;<span th:text="#{label.failed}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p class="center"><h5 id="tips"></h5></p>
+                </div>
+            </div>
+
+        </div>
+    </div><!--/dialogs-->
+
+</div>
+
+<script src="js/app/common/log/main.js"></script>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cit.web.system.dao.MenuDao">
+    <!--结果集-->
+    <resultMap id="menuResultMap" type="com.cit.web.system.entity.Menu">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="pid" jdbcType="INTEGER" property="pid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="permission" jdbcType="VARCHAR" property="permission"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="orders" jdbcType="INTEGER" property="orders"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <!--查询数量-->
+    <select id="count" resultType="int">
+        SELECT COUNT(0)
+        FROM sys_menu
+        <where>
+          <if test="id != null and id.trim() != ''">and `id` = #{id}</if>
+          <if test="pid != null and pid.trim() != ''">and `pid` = #{pid}</if>
+          <if test="name != null and name.trim() != ''">and `name` = #{name}</if>
+          <if test="url != null and url.trim() != ''">and `url` = #{url}</if>
+          <if test="permission != null and permission.trim() != ''">and `permission` = #{permission}</if>
+          <if test="icon != null and icon.trim() != ''">and `icon` = #{icon}</if>
+          <if test="type != null and type.trim() != ''">and `type` = #{type}</if>
+          <if test="orders != null and orders.trim() != ''">and `orders` = #{orders}</if>
+          <if test="gmtCreate != null and gmtCreate.trim() != ''">and `gmt_create` = #{gmtCreate}</if>
+          <if test="gmtModified != null and gmtModified.trim() != ''">and `gmt_modified` = #{gmtModified}</if>
+        </where>
+    </select>
+
+    <!--查询列表-->
+    <select id="list" resultMap="menuResultMap">
+        SELECT
+        `id`,
+        `pid`,
+        `name`,
+        `url`,
+        `permission`,
+        `icon`,
+        `type`,
+        `orders`,
+        `gmt_create`,
+        `gmt_modified`
+        FROM sys_menu
+        <where>
+            <if test="id != null and id.trim() != ''">and `id` = #{id}</if>
+            <if test="pid != null and pid.trim() != ''">and `pid` = #{pid}</if>
+            <if test="name != null and name.trim() != ''">and `name` = #{name}</if>
+            <if test="url != null and url.trim() != ''">and `url` = #{url}</if>
+            <if test="permission != null and permission.trim() != ''">and `permission` = #{permission}</if>
+            <if test="icon != null and icon.trim() != ''">and `icon` = #{icon}</if>
+            <if test="type != null and type.trim() != ''">and `type` = #{type}</if>
+            <if test="orders != null and orders.trim() != ''">and `orders` = #{orders}</if>
+            <if test="gmtCreate != null and gmtCreate.trim() != ''">and `gmt_create` = #{gmtCreate}</if>
+            <if test="gmtModified != null and gmtModified.trim() != ''">and `gmt_modified` = #{gmtModified}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY `${sort}` ${order}
+            </when>
+            <otherwise>
+                ORDER BY `id` ${order}
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--获取-->
+    <select id="get" resultMap="menuResultMap">
+        SELECT
+        `id`,
+        `pid`,
+        `name`,
+        `url`,
+        `permission`,
+        `icon`,
+        `type`,
+        `orders`,
+        `gmt_create`,
+        `gmt_modified`
+        FROM sys_menu
+        WHERE `id` = #{id}
+    </select>
+
+    <!--插入-->
+    <insert id="save" parameterType="com.cit.web.system.entity.Menu" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_menu
+        (
+        `pid`,
+        `name`,
+        `url`,
+        `permission`,
+        `icon`,
+        `type`,
+        `orders`,
+        `gmt_create`,
+        `gmt_modified`
+        )
+        VALUES
+        (
+        #{pid},
+        #{name},
+        #{url},
+        #{permission},
+        #{icon},
+        #{type},
+        #{orders},
+        #{gmtCreate},
+        #{gmtModified}
+        )
+    </insert>
+
+    <!--更新-->
+    <update id="update" parameterType="com.cit.web.system.entity.Menu">
+        UPDATE sys_menu
+        <set>
+          <if test="pid != null">`pid` = #{pid},</if>
+          <if test="name != null">`name` = #{name},</if>
+          <if test="url != null">`url` = #{url},</if>
+          <if test="permission != null">`permission` = #{permission},</if>
+          <if test="icon != null">`icon` = #{icon},</if>
+          <if test="type != null">`type` = #{type},</if>
+          <if test="orders != null">`orders` = #{orders},</if>
+          <if test="gmtCreate != null">`gmt_create` = #{gmtCreate},</if>
+          <if test="gmtModified != null">`gmt_modified` = #{gmtModified},</if>
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <!--删除-->
+    <delete id="remove">
+        DELETE FROM sys_menu WHERE `id` = #{id}
+    </delete>
+
+    <!--批量删除-->
+    <delete id="batchRemove">
+        DELETE FROM sys_menu WHERE `id` IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--批量插入-->
+    <insert id="batchSave" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_menu
+        (
+        `pid`,
+        `name`,
+        `url`,
+        `permission`,
+        `icon`,
+        `type`,
+        `orders`,
+        `gmt_create`,
+        `gmt_modified`
+        )
+        VALUES
+        <foreach collection="menus" item="menu" separator=",">
+        (
+        #{menu.pid},
+        #{menu.name},
+        #{menu.url},
+        #{menu.permission},
+        #{menu.icon},
+        #{menu.type},
+        #{menu.orders},
+        #{menu.gmtCreate},
+        #{menu.gmtModified}
+        )
+        </foreach>
+    </insert>
+
+    <!---->
+    <!---->
+    <!---->
+    <!--通过id获取菜单名-->
+    <select id="getNameById" resultType="string">
+        SELECT `name` FROM sys_menu WHERE `id` = #{id}
+    </select>
+
+</mapper>

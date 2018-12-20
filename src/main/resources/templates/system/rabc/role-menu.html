@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger" th:text="${role.name}"></h5>
+</div>
+
+<div class="modal-body">
+    <input type="hidden" name="id" th:value="${role.id}"/>
+
+    <div>
+        <i id="roleMenuLoading" class="ace-icon fa fa-spinner fa-spin blue bigger-125"></i>
+    </div>
+    <div id="roleMenuTree" class="ztree"></div>
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+        <button shiro:hasPermission="rabc:role:menu:save" class="btn btn-sm btn-primary" onclick="saveRoleMenuPermission()">
+            <i class="ace-icon fa fa-check"></i>
+            <span th:text="#{confirm.btn.save}"></span>
+        </button>
+    </div>
+</div>
+
+<script src="js/app/system/rabc/role-menu.js"></script>

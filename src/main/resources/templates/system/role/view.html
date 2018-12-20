@@ -1,0 +1,53 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger" th:text="#{label.view}+#{system.role}"></h5>
+</div>
+
+<div class="modal-body">
+    <div class="profile-user-info profile-user-info-striped">
+
+        <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.role.name}"></div>
+            <div class="profile-info-value">
+                <span th:text="${role.name}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.role.description}"></div>
+            <div class="profile-info-value">
+                <span th:text="${role.description}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.role.orders}"></div>
+            <div class="profile-info-value">
+                <span th:text="${role.orders}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.role.userIdCreate}"></div>
+            <div class="profile-info-value">
+                <span th:text="${role.userIdCreate}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.role.gmtCreate}"></div>
+            <div class="profile-info-value">
+                <span th:text="${role.gmtCreate}?${#dates.format(role.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.role.gmtModified}"></div>
+            <div class="profile-info-value">
+                <span th:text="${role.gmtModified}?${#dates.format(role.gmtModified,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+     </div>
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+    </div>
+</div>

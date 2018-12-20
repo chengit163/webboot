@@ -1,0 +1,88 @@
+package ${packageName}.${module}.validator;
+
+import ${packageName}.${module}.entity.${table.className};
+import org.apache.commons.lang.StringUtils;
+import java.util.regex.Pattern;
+
+/**
+ * ${table.tableComment}验证器
+ */
+public class ${table.className}Validator
+{
+    /**
+     * 验证: ${table.tableComment}
+     * @param ${table.fieldName}
+     * @param isNullable (false: save; true: update)
+     * @return
+     */
+    public static String validate(${table.className} ${table.fieldName}, boolean isNullable)
+    {
+        if (isNullable)
+        {
+            // 更新时需要判断主键
+            if (${table.fieldName}.get${pk.methodName}() == null)
+            {
+                return "${pk.columnComment}不能为空";
+            }
+        }
+        //其他字段
+        String message = null;
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName)
+#if($column.javaType == 'String')
+        String ${column.fieldName} = StringUtils.trim(${table.fieldName}.get${column.methodName}());
+        if ((message = validate${column.methodName}(${column.fieldName}, isNullable)) != null)
+        {
+            return message;
+        }
+        ${table.fieldName}.set${column.methodName}(${column.fieldName});
+#end
+#end
+#end
+        return message;
+    }
+
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName)
+#if($column.javaType == 'String')
+    /**
+     * 验证: ${column.columnComment}
+     * @param ${column.fieldName}
+     * @return
+     */
+    public static String validate${column.methodName}(String ${column.fieldName}, boolean isNullable)
+    {
+        if (isNullable && ${column.fieldName} == null)
+        {
+            // 更新时允许字段为null
+            return null;
+        }
+        if (StringUtils.isEmpty(${column.fieldName}))
+        {
+#if ($column.isNullable != 'YES')
+            // 不允许该字段为空
+            return "${column.columnComment}不能为空";
+#else
+            // 允许该字段为空
+            return null;
+#end
+        }
+#if ($column.rule.min && $column.rule.max)
+        if (StringUtils.length(${column.fieldName}) < ${column.rule.min} || StringUtils.length(${column.fieldName}) > ${column.rule.max})
+        {
+            return "${column.columnComment}长度必须在${column.rule.min}~${column.rule.max}之间";
+        }
+#end
+#if ($column.rule.regexp)
+        if (!Pattern.matches("${column.rule.regexp}", ${column.fieldName}))
+        {
+            return "${column.columnComment}${column.rule.note}";
+        }
+#end
+        return null;
+    }
+
+#end
+#end
+#end
+}

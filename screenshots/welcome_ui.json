@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Ace Admin",
+    "desc": "当前使用",
+    "github": "http://ace.jeka.by",
+    "home": "http://ace.jeka.by"
+  },
+  {
+    "name": "AdminLTE",
+    "desc": "基于 bootstrap",
+    "github": "https://github.com/almasaeed2010/AdminLTE",
+    "home": "https://adminlte.io"
+  },
+  {
+    "name": "Element",
+    "desc": "饿了么前端 - 桌面端",
+    "github": "https://github.com/ElemeFE/element",
+    "home": "http://element.eleme.io"
+  },
+  {
+    "name": "Mint Ui",
+    "desc": "饿了么前端 - 移动端",
+    "github": "https://github.com/ElemeFE/mint-ui",
+    "home": "http://mint-ui.github.io/#!/en"
+  },
+  {
+    "name": "vue-element-admin",
+    "desc": "基于 vue 和 element",
+    "github": "https://github.com/PanJiaChen/vue-element-admin",
+    "home": "https://panjiachen.github.io/vue-element-admin/#/dashboard"
+  },
+  {
+    "name": "VUX",
+    "desc": "一个凑合的 Vue.js 移动端 UI 组件库",
+    "github": "https://github.com/airyland/vux",
+    "home": "https://vux.li"
+  }
+]

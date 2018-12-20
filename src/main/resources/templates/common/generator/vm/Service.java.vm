@@ -1,0 +1,25 @@
+package ${packageName}.${module}.service;
+
+import ${packageName}.${module}.entity.${table.className};
+
+import java.util.List;
+import java.util.Map;
+
+public interface ${table.className}Service
+{
+
+    int count(Map<String, Object> map);
+
+    List<${table.className}> list(Map<String, Object> map);
+
+    ${table.className} get(${pk.javaType} id);
+
+    int save(${table.className} ${table.fieldName});
+
+    int update(${table.className} ${table.fieldName});
+
+    int remove(${pk.javaType} ${pk.fieldName});
+
+    int batchRemove(${pk.javaType}[] ${pk.fieldName}s);
+
+}

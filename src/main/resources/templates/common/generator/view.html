@@ -1,0 +1,119 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger">View</h5>
+</div>
+
+<div class="modal-body">
+    <div class="profile-user-info profile-user-info-striped">
+        <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{common.table.tableName}"></div>
+            <div class="profile-info-value">
+                <span th:text="${table.tableName}"></span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{common.table.tableComment}"></div>
+            <div class="profile-info-value">
+                <span th:text="${table.tableComment}"></span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{common.table.createTime}"></div>
+            <div class="profile-info-value">
+                <span th:text="${table.createTime}?${#dates.format(table.createTime,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+        <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{common.table.columns}"></div>
+        </div>
+    </div>
+
+    <div class="tabbable tabs-left" style="overflow-y:auto;">
+        <ul class="nav nav-tabs">
+            <li th:each="column,columnStat:${table.columns}" th:class="${columnStat.index==0}?'active':''"
+                th:title="${column.columnComment}">
+                <a data-toggle="tab" th:href="'#'+${table.tableName}+'_'+${column.columnName}"
+                   th:aria-expanded="${columnStat.index==0}?'true':'false'">
+                    <span th:text="${column.columnName}"></span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div th:each="column,columnStat:${table.columns}"
+                 th:class="${columnStat.index==0}?'tab-pane active':'tab-pane'"
+                 th:id="${table.tableName}+'_'+${column.columnName}">
+                <div class="profile-user-info">
+                    <div class="profile-info-row">
+                        <div class="profile-info-name" th:text="#{common.column.columnComment}"></div>
+                        <div class="profile-info-value">
+                            <span th:text="${column.columnComment}"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name" th:text="#{common.column.dataType}"></div>
+                        <div class="profile-info-value">
+                            <span th:text="${column.dataType}"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name" th:text="#{common.column.columnType}"></div>
+                        <div class="profile-info-value">
+                            <span th:text="${column.columnType}"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name" th:text="#{common.column.isNullable}"></div>
+                        <div class="profile-info-value">
+                            <span th:text="${column.isNullable}"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name" th:text="#{common.column.columnKey}"></div>
+                        <div class="profile-info-value">
+                            <span th:text="${column.columnKey}"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name" th:text="#{common.column.extra}"></div>
+                        <div class="profile-info-value">
+                            <span th:text="${column.extra}"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row" th:if="${column.options} != null">
+                        <div class="profile-info-name" th:text="#{common.column.options}"></div>
+                        <div class="profile-info-value">
+                            <span th:text="${column.options}"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row" th:if="${column.rule} != null">
+                        <div class="profile-info-name" th:text="#{common.column.rule.min}"></div>
+                        <div class="profile-info-value">
+                            <span th:text="${column.rule.min}"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row" th:if="${column.rule} != null">
+                        <div class="profile-info-name" th:text="#{common.column.rule.max}"></div>
+                        <div class="profile-info-value">
+                            <span th:text="${column.rule.max}"></span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row" th:if="${column.rule} != null">
+                        <div class="profile-info-name" th:text="#{common.column.rule.regex}"></div>
+                        <div class="profile-info-value">
+                            <span th:text="${column.rule.regex}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+    </div>
+</div>

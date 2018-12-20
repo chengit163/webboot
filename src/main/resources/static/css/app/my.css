@@ -1,0 +1,27 @@
+.loading-overlay {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    right: -1px;
+    left: -1px;
+    z-index: 999;
+    text-align: center;
+    min-height: 100%;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.loading-overlay > .loading-icon {
+    position: relative;
+    top: 20%;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.loading-overlay > .loading-icon.icon-spin {
+    -moz-animation-duration: 1.2s;
+    -webkit-animation-duration: 1.2s;
+    -o-animation-duration: 1.2s;
+    -ms-animation-duration: 1.2s;
+    animation-duration: 1.2s;
+}

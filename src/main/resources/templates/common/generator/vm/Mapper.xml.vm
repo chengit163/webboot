@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${packageName}.${module}.dao.${table.className}Dao">
+    <!--结果集-->
+    <resultMap id="${table.fieldName}ResultMap" type="${packageName}.${module}.entity.${table.className}">
+        <id column="${pk.columnName}" jdbcType="${pk.jdbcType}" property="${pk.fieldName}"/>
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName)
+        <result column="${column.columnName}" jdbcType="${column.jdbcType}" property="${column.fieldName}"/>
+#end
+#end
+    </resultMap>
+
+    <!--查询数量-->
+    <select id="count" resultType="int">
+        SELECT COUNT(0)
+        FROM ${table.tableName}
+        <where>
+#foreach ($column in $table.columns)
+          <if test="${column.fieldName} != null and ${column.fieldName}.trim() != ''">and `${column.columnName}` = #{${column.fieldName}}</if>
+#end
+        </where>
+    </select>
+
+    <!--查询列表-->
+    <select id="list" resultMap="${table.fieldName}ResultMap">
+        SELECT
+#foreach ($column in $table.columns)
+        `${column.columnName}`#if($velocityCount != $table.columns.size()),
+#else
+
+#end
+#end
+        FROM ${table.tableName}
+        <where>
+#foreach ($column in $table.columns)
+            <if test="${column.fieldName} != null and ${column.fieldName}.trim() != ''">and `${column.columnName}` = #{${column.fieldName}}</if>
+#end
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY `${sort}` ${order}
+            </when>
+            <otherwise>
+                ORDER BY `${pk.columnName}` ${order}
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--获取-->
+    <select id="get" resultMap="${table.fieldName}ResultMap">
+        SELECT
+#foreach ($column in $table.columns)
+        `${column.columnName}`#if($velocityCount != $table.columns.size()),
+#else
+
+#end
+#end
+        FROM ${table.tableName}
+        WHERE `${pk.columnName}` = #{${pk.fieldName}}
+    </select>
+
+    <!--插入-->
+    <insert id="save" parameterType="${packageName}.${module}.entity.${table.className}" useGeneratedKeys="true" keyProperty="${pk.fieldName}">
+        INSERT INTO ${table.tableName}
+        (
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName || $column.extra != 'auto_increment')
+        `${column.columnName}`#if($velocityCount != $table.columns.size()),
+#else
+
+#end
+#end
+#end
+        )
+        VALUES
+        (
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName || $column.extra != 'auto_increment')
+        #{${column.fieldName}}#if($velocityCount != $table.columns.size()),
+#else
+
+#end
+#end
+#end
+        )
+    </insert>
+
+    <!--更新-->
+    <update id="update" parameterType="${packageName}.${module}.entity.${table.className}">
+        UPDATE ${table.tableName}
+        <set>
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName)
+          <if test="${column.fieldName} != null">`${column.columnName}` = #{${column.fieldName}},</if>
+#end
+#end
+        </set>
+        WHERE `${pk.columnName}` = #{${pk.fieldName}}
+    </update>
+
+    <!--删除-->
+    <delete id="remove">
+        DELETE FROM ${table.tableName} WHERE `${pk.columnName}` = #{${pk.fieldName}}
+    </delete>
+
+    <!--批量删除-->
+    <delete id="batchRemove">
+        DELETE FROM ${table.tableName} WHERE `${pk.columnName}` IN
+        <foreach item="${pk.fieldName}" collection="array" open="(" separator="," close=")">
+            #{${pk.fieldName}}
+        </foreach>
+    </delete>
+
+    <!--批量插入-->
+    <insert id="batchSave" useGeneratedKeys="true" keyProperty="${pk.fieldName}">
+        INSERT INTO ${table.tableName}
+        (
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName || $column.extra != 'auto_increment')
+        `${column.columnName}`#if($velocityCount != $table.columns.size()),
+#else
+
+#end
+#end
+#end
+        )
+        VALUES
+        <foreach collection="${table.fieldName}s" item="${table.fieldName}" separator=",">
+        (
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName || $column.extra != 'auto_increment')
+        #{${table.fieldName}.${column.fieldName}}#if($velocityCount != $table.columns.size()),
+#else
+
+#end
+#end
+#end
+        )
+        </foreach>
+    </insert>
+
+</mapper>

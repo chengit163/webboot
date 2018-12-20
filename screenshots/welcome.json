@@ -1,0 +1,68 @@
+[
+  {
+    "name": "Spring Boot",
+    "desc": "核心框架",
+    "github": "https://github.com/spring-projects/spring-boot",
+    "home": "http://spring.io/projects/spring-boot"
+  },
+  {
+    "name": "Apache Shiro",
+    "desc": "安全框架",
+    "github": "https://github.com/apache/shiro",
+    "home": "http://shiro.apache.org"
+  },
+  {
+    "name": "MyBatis",
+    "desc": "数据库持久层框架",
+    "github": "https://github.com/mybatis/mybatis-3",
+    "home": "http://www.mybatis.org/mybatis-3"
+  },
+  {
+    "name": "Druid",
+    "desc": "数据库连接池",
+    "github": "https://github.com/alibaba/druid",
+    "home": ""
+  },
+  {
+    "name": "Mybatis-PageHelper",
+    "desc": "Mybatis分页插件",
+    "github": "https://github.com/pagehelper/Mybatis-PageHelper",
+    "home": ""
+  },
+  {
+    "name": "Redis",
+    "desc": "NoSql",
+    "github": "",
+    "home": "https://redis.io"
+  },
+  {
+    "name": "Logback",
+    "desc": "日志框架",
+    "github": "https://github.com/qos-ch/logback",
+    "home": "https://logback.qos.ch"
+  },
+  {
+    "name": "Swagger",
+    "desc": "文档生成工具",
+    "github": "https://github.com/swagger-api",
+    "home": "https://swagger.io"
+  },
+  {
+    "name": "Thymeleaf",
+    "desc": "模板引擎",
+    "github": "https://github.com/thymeleaf",
+    "home": "https://www.thymeleaf.org"
+  },
+  {
+    "name": "Quartz",
+    "desc": "作业调度框架",
+    "github": "https://github.com/quartz-scheduler/quartz",
+    "home": "http://www.quartz-scheduler.org"
+  },
+  {
+    "name": "Apache POI",
+    "desc": "Microsoft Office格式文档的操作",
+    "github": "https://github.com/apache/poi",
+    "home": "http://poi.apache.org/"
+  }
+]

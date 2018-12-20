@@ -1,0 +1,517 @@
+var ${module}${table.className}Content;
+var ${module}${table.className}Widget;
+var ${module}${table.className}Dialog;
+var ${module}${table.className}Table;
+var ${module}${table.className}Label;
+var ${module}${table.className}Dialogs;
+var ${module}${table.className}Excel;
+var ${module}${table.className}Sort;
+var ${module}${table.className}Order;
+
+
+$(function () {
+    ${module}${table.className}Content = $('#${module}_${table.fieldName}_content');
+    ${module}${table.className}Widget = $('#${module}_${table.fieldName}_widget');
+    ${module}${table.className}Dialog = $('#${module}_${table.fieldName}_dialog');
+    ${module}${table.className}Table = $('#${module}_${table.fieldName}_table');
+    ${module}${table.className}Label = ${module}${table.className}Content.find('input[name="hidden_label"]').val();
+    // 加载数据
+    ${module}${table.className}Load();
+    //显示隐藏查询
+    $('#${module}_${table.fieldName}_query_switch').change(function () {
+        if ($(this).is(":checked")) {
+            $('#${module}_${table.fieldName}_query_box').trigger('show.ace.widget').widget_box('show');
+        } else {
+            $('#${module}_${table.fieldName}_query_box').trigger('hide.ace.widget').widget_box('hide');
+        }
+    });
+    // 重置
+    $('#${module}_${table.fieldName}_reset').bind("click", function () {
+        $('#${module}_${table.fieldName}_form').emptyForm();
+        ${module}${table.className}Reload();
+    });
+    // 搜索
+    $('#${module}_${table.fieldName}_search').bind("click", function () {
+        $('#${module}_${table.fieldName}_form').trimForm();
+        ${module}${table.className}Reload();
+    });
+    // 对话框显示
+    ${module}${table.className}Dialog.on('show.bs.modal', function () {
+        //'shown.bs.modal'
+        $(this).modalDialogOnOpen();
+    });
+    // 对话框隐藏
+    ${module}${table.className}Dialog.on('hidden.bs.modal', function () {
+        //'hide.bs.modal'
+        $(this).modalDialogOnClose();
+    });
+
+    // Excel
+    ${module}${table.className}Dialogs = $('#${module}_${table.fieldName}_dialogs');
+    ${module}${table.className}Excel = $('#${module}_${table.fieldName}_excel_form');
+
+    if (${module}${table.className}Excel.length > 0) {
+        ${module}${table.className}Excel.bootstrapValidator({
+            feedbackIcons: {
+                valid: 'ace-icon fa fa-check-circle',
+                invalid: 'ace-icon fa fa-times-circle',
+                validating: 'ace-icon fa fa-info-circle'
+            },
+            fields: {
+                file: {
+                    validators: {
+                        notEmpty: {message: '请选择一个0~10M的Excel文件(.xlsx)'},
+                        file: {
+                            extension: 'xlsx',
+                            minSize: 1,
+                            maxSize: 10 * 1024 * 1024,
+                            message: '请选择一个0~10M的Excel文件(.xlsx)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    ${module}${table.className}Dialogs.on('hide.bs.modal', function () {
+        if (${module}${table.className}Excel.length > 0) {
+            ${module}${table.className}Excel.emptyForm();
+            ${module}${table.className}Excel.data("bootstrapValidator").resetForm();
+        }
+        $(this).find('.modal-content').addClass('hidden');
+    });
+
+});
+
+function ${module}${table.className}Fix() {
+    // refresh, toggle, columns 样式冲突修改
+    ${module}${table.className}Widget.find('button[aria-label="refresh"]').removeClass('btn-default').addClass('btn-grey');
+    ${module}${table.className}Widget.find('button[aria-label="toggle"]').removeClass('btn-default').addClass('btn-grey');
+    ${module}${table.className}Widget.find('button[aria-label="columns"]').removeClass('btn-default').addClass('btn-grey').css({'margin-left': '1px'});
+    ${module}${table.className}Widget.find('button[aria-label="columns"]').find('.caret').remove();
+    // 页码
+    var num = ${module}${table.className}Widget.find('.fixed-table-pagination').find('.pull-left').find('button');
+    if (num.hasClass('btn-default')) {
+        num.removeClass('btn-default').addClass('btn-sm btn-white dropdown-toggle');
+        num.find('.caret').remove();
+        num.append('<i class="ace-icon fa fa-angle-down icon-on-right"></i>');
+    }
+    // checkbox居中
+    ${module}${table.className}Table.find('.bs-checkbox').css({'text-align': 'center', 'vertical-align': 'middle'});
+}
+
+function ${module}${table.className}Load() {
+    var myGet = ${module}${table.className}Content.find('input[name="hidden_get"]').val();
+    var myUpdate = ${module}${table.className}Content.find('input[name="hidden_update"]').val();
+    var myRemove = ${module}${table.className}Content.find('input[name="hidden_remove"]').val();
+    var myData = {};
+    //
+    ${module}${table.className}Table.bootstrapTable({
+        url: '/${module}/${table.fieldName}',
+        method: 'GET',
+        dataType: 'json',
+        sidePagination: 'server',
+        cache: false,
+        pagination: true,
+        pageNumber: 1,
+        pageSize: 10,
+        pageList: [5, 10, 25, 50, 100],
+        clickToSelect: false,
+        striped: true,
+        showRefresh: true,
+        showToggle: true,
+        showColumns: true,
+        toolbar: '#${module}_${table.fieldName}_toolbar',
+        uniqueId: '${pk.fieldName}',
+        idField: '${pk.fieldName}',
+        sortName: '${pk.fieldName}',
+        sortOrder: 'asc',
+        // 传递参数（*）
+        queryParams: function (params) {
+            ${module}${table.className}Widget.widgetBoxShowLoading();
+            ${module}${table.className}Fix();
+            ${module}${table.className}Sort = params.sort;
+            ${module}${table.className}Order = params.order;
+            var query = {
+                'sort': params.sort,
+                'order': params.order,
+                'pageSize': params.limit,
+                'pageNum': (params.offset / params.limit) + 1,
+            };
+            $($('#${module}_${table.fieldName}_form').serializeArray()).each(function () {
+                if ($.trim(this.value) != '')
+                    query[this.name] = $.trim(this.value);
+            });
+            return query;
+        },
+        onLoadSuccess: function (data) {
+            ${module}${table.className}Widget.widgetBoxHideLoading();
+            ${module}${table.className}Fix();
+        },
+        onLoadError: function (status) {
+            ${module}${table.className}Widget.widgetBoxHideLoading();
+            ${module}${table.className}Fix();
+        },
+        onPostBody: function (cardView) {
+            ${module}${table.className}Fix();
+        },
+        onPageChange: function () {
+            ${module}${table.className}Fix();
+        },
+        columns: [
+            {
+                checkbox: true,
+                align: 'center'
+            },
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName)
+            {
+                field: '${column.fieldName}',
+                align: 'center',
+                sortable: true,
+#if($velocityCount > 6)
+                visible: false,
+#end
+##    editable +++
+#if ($column.javaType != 'java.util.Date')
+                editable: myUpdate == undefined ? null :
+#if($column.options)
+                {
+                    type: 'select',
+                    emptytext: '-',
+                    source: function () {
+                        var options = [];
+#foreach ($option in $column.options)
+                        options.push({value: ${option.key}, text: '${option.value}'});
+#end
+                        return options;
+                    }
+                },
+#else
+                {
+                    type: 'text',
+                    emptytext: '-',
+#if ($column.isNullable != 'YES' || ($column.javaType == 'Integer' || $column.javaType == 'Long' || $column.javaType == 'Float' || $column.javaType == 'Double') || $column.rule)
+                    validate: function (v) {
+#if ($column.isNullable != 'YES')
+                        if (!$.trim(v)) {return '不能为空';}
+#end
+#if($column.javaType == 'Integer' || $column.javaType == 'Long' || $column.javaType == 'Float' || $column.javaType == 'Double')
+                        if(isNaN(v)) {return '必须为数字';}
+#end
+#if ($column.rule.min && $column.rule.max)
+                        if ($.trim(v).length < ${column.rule.min} || $.trim(v).length > ${column.rule.max}) {return '长度必须在${column.rule.min}~${column.rule.max}之间'}
+#end
+#if ($column.rule.regex)
+                        if (!/${column.rule.regex}/.test(v)) {return '${column.rule.note}';}
+#end
+                    }
+#end
+                },
+#end
+#end
+##    editable ---
+##    formatter +++
+#if($column.options)
+                formatter: myUpdate != undefined ? null : function (value, row, index) {
+                    var html = [];
+                    switch (value) {
+#foreach ($option in $column.options)
+                        case ${option.key}:
+                            html.push('${option.value}');
+                            break;
+#end
+                    }
+                    return html.join('');
+                }
+#end
+##    formatter ---
+            },
+#end
+#end
+            {
+                field: '${pk.fieldName}',
+                align: 'center',
+                sortable: true,
+                switchable: false,
+                formatter: function (value, row, index) {
+                    var html = [];
+                    html.push('<div class="hidden-sm hidden-xs btn-group">');
+                    if (myGet != undefined) {
+                        html.push('<button href="/${module}/${table.fieldName}/view/' + value + '" class="btn btn-xs btn-success" data-toggle="modal" data-target="#${module}_${table.fieldName}_dialog" title="' + myGet + '">');
+                        html.push('<i class="ace-icon fa fa-eye"></i>');
+                        html.push('</button>');
+                    }
+                    if (myUpdate != undefined) {
+                        html.push('<button href="/${module}/${table.fieldName}/edit/' + value + '" class="btn btn-xs btn-info" data-toggle="modal" data-target="#${module}_${table.fieldName}_dialog" title="' + myUpdate + '">');
+                        html.push('<i class="ace-icon fa fa-pencil"></i>');
+                        html.push('</button>');
+                    }
+                    if (myRemove != undefined) {
+                        html.push('<button href="#" class="btn btn-xs btn-danger" onclick="${module}${table.className}Remove(' + value + ')" title="' + myRemove + '">');
+                        html.push('<i class="ace-icon fa fa-trash"></i>');
+                        html.push('</button>');
+                    }
+                    html.push('</div>');
+                    //
+                    html.push('<div class="hidden-md hidden-lg">');
+                    html.push('<div class="inline pos-rel">');
+                    html.push('<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">');
+                    html.push('<i class="ace-icon fa fa-cog icon-only bigger-110"></i>');
+                    html.push('</button>');
+                    html.push('<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">');
+                    if (myGet != undefined) {
+                        html.push('<li>');
+                        html.push('<a href="/${module}/${table.fieldName}/view/' + value + '" class="" data-toggle="modal" data-target="#${module}_${table.fieldName}_dialog" title="' + myGet + '">');
+                        html.push('<span class="light-green">');
+                        html.push('<i class="ace-icon fa fa-eye"></i>');
+                        html.push('</span>');
+                        html.push('</a>');
+                        html.push('</li>');
+                    }
+                    if (myUpdate != undefined) {
+                        html.push('<li>');
+                        html.push('<a href="/${module}/${table.fieldName}/edit/' + value + '" class="" data-toggle="modal" data-target="#${module}_${table.fieldName}_dialog" title="' + myUpdate + '">');
+                        html.push('<span class="light-blue">');
+                        html.push('<i class="ace-icon fa fa-pencil"></i>');
+                        html.push('</span>');
+                        html.push('</a>');
+                        html.push('</li>');
+                    }
+                    if (myRemove != undefined) {
+                        html.push('<li>');
+                        html.push('<a href="#" class="" onclick="${module}${table.className}Remove(' + value + ')" title="' + myRemove + '">');
+                        html.push('<span class="light-red">');
+                        html.push('<i class="ace-icon fa fa-trash"></i>');
+                        html.push('</span>');
+                        html.push('</a>');
+                        html.push('</li>');
+                    }
+                    html.push('</ul>');
+                    html.push('</div>');
+                    html.push('</div>');
+                    return html.join('');
+                }
+            }
+        ],
+        onEditableShown: function (field, row, $el, editable) {
+            var title = ${module}${table.className}Table.find('thead').find('th[data-field="' + field + '"]').find('div.th-inner').find('span').text();
+            if (title != undefined) {
+                $el.next().find('.popover-title').css('display', 'block').html(title);
+            }
+            return false;
+        },
+        onEditableSave: function (field, row, oldValue, $el) {
+            myData[field + row['${pk.fieldName}']] = oldValue;
+            return false;
+        },
+        onEditableHidden: function(field, row, $el, reason) {
+            if (reason == 'save') {
+                var data = {};
+                data['${pk.fieldName}'] = row['${pk.fieldName}'];
+                data[field] = row[field];
+                $el.tdEditLoading();
+                $.ajax({
+                    url: '/${module}/${table.fieldName}',
+                    type: 'PUT',
+                    data: data,
+                    success: function (json) {
+                        var index = ${module}${table.className}Table.find('tr[data-uniqueid="' + row['${pk.fieldName}'] + '"]').attr('data-index');
+                        if (/^\d+$/.test(index)) {
+                            if (json.code == 0) {
+                                ${module}${table.className}Table.bootstrapTable('updateRow', {index: index, row: data});
+                                var $e = ${module}${table.className}Table.find('tr[data-uniqueid="' + row['${pk.fieldName}'] + '"]').find('a[data-name="' + field + '"]');
+                                $e.tdEditSuccess();
+                            } else {
+                                data[field] = myData[field + row['${pk.fieldName}']];
+                                ${module}${table.className}Table.bootstrapTable('updateRow', {index: index, row: data});
+                                var $e = ${module}${table.className}Table.find('tr[data-uniqueid="' + row['${pk.fieldName}'] + '"]').find('a[data-name="' + field + '"]');
+                                $e.tdEditFailed();
+                            }
+                        }
+                        delete myData[field + row['${pk.fieldName}']];
+                    },
+                    error: function (error) {
+                        var index = ${module}${table.className}Table.find('tr[data-uniqueid="' + row['${pk.fieldName}'] + '"]').attr('data-index');
+                        if (/^\d+$/.test(index)) {
+                            data[field] = myData[field + row['${pk.fieldName}']];
+                            ${module}${table.className}Table.bootstrapTable('updateRow', {index: index, row: data});
+                            var $e = ${module}${table.className}Table.find('tr[data-uniqueid="' + row['${pk.fieldName}'] + '"]').find('a[data-name="' + field + '"]');
+                            $e.tdEditError();
+                        }
+                        delete myData[field + row['${pk.fieldName}']];
+                    }
+                });
+            }
+            return false;
+        }
+    });
+}
+
+function ${module}${table.className}Reload() {
+    ${module}${table.className}Table.bootstrapTable('refresh');
+}
+
+function ${module}${table.className}Remove(${pk.fieldName}) {
+    var message = '确认要删除该[' + ${module}${table.className}Label + ']记录？';
+    bootbox.confirm(message, function (result) {
+        if (result) {
+            ${module}${table.className}Widget.widgetBoxShowLoading();
+            $.ajax({
+                url: '/${module}/${table.fieldName}',
+                type: 'POST',
+                data: {_method: 'DELETE', '${pk.fieldName}': ${pk.fieldName}},
+                success: function (json) {
+                    ${module}${table.className}Widget.widgetBoxHideLoading();
+                    if (json.code == 0) {
+                        ${module}${table.className}Table.bootstrapTable('removeByUniqueId', ${pk.fieldName});
+                        toastr.success(json.msg);
+                    }
+                    else {
+                        toastr.error('msg: ' + json.msg, 'code: ' + json.code);
+                    }
+                }, error: function () {
+                    ${module}${table.className}Widget.widgetBoxHideLoading();
+                    toastr.error('Server Error');
+                }
+            });
+        }
+    });
+}
+
+function ${module}${table.className}BatchRemove() {
+    var rows = ${module}${table.className}Table.bootstrapTable('getSelections');
+    if (rows.length > 0) {
+        var message = '确认要删除选择的' + rows.length + '条[' + ${module}${table.className}Label + ']记录？';
+        bootbox.confirm(message, function (result) {
+            if (result) {
+                var ${pk.fieldName}s = new Array();
+                $.each(rows, function (i, row) {
+                    ${pk.fieldName}s[i] = row['${pk.fieldName}'];
+                });
+                ${module}${table.className}Widget.widgetBoxShowLoading();
+                $.ajax({
+                    url: '/${module}/${table.fieldName}/batchRemove',
+                    type: 'POST',
+                    data: {'${pk.fieldName}s': ${pk.fieldName}s},
+                    success: function (json) {
+                        ${module}${table.className}Widget.widgetBoxHideLoading();
+                        if (json.code == 0) {
+                            for (var i = 0; i < ${pk.fieldName}s.length; i++) {
+                                ${module}${table.className}Table.bootstrapTable('removeByUniqueId',  ${pk.fieldName}s[i]);
+                            }
+                            toastr.success(json.msg);
+                        }
+                        else {
+                            toastr.error('msg: ' + json.msg, 'code: ' + json.code);
+                        }
+                    }, error: function () {
+                        ${module}${table.className}Widget.widgetBoxHideLoading();
+                        toastr.error('Server Error');
+                    }
+                });
+            }
+        });
+    } else {
+        toastr.warning("请至少选择一条记录!");
+    }
+}
+
+function ${module}${table.className}Export() {
+    ${module}${table.className}Dialogs.find('div[name="export"]').removeClass('hidden');
+    ${module}${table.className}Dialogs.modal('show');
+}
+
+function ${module}${table.className}ExportExe() {
+    ${module}${table.className}Dialogs.modal('hide');
+    var query = [];
+    $($('#${module}_${table.fieldName}_form').serializeArray()).each(function () {
+        if ($.trim(this.value) != '')
+            query.push(this.name + '=' + $.trim(this.value) + '&')
+    });
+    if (${module}${table.className}Sort != undefined) {
+        query.push('sort=' + ${module}${table.className}Sort + '&')
+    }
+    if (${module}${table.className}Order != undefined) {
+        query.push('order=' + ${module}${table.className}Order + '&')
+    }
+    query.push('_=' + new Date().getTime());
+    var url = '/${module}/${table.fieldName}/export?' + query.join('');
+    window.open(encodeURI(url));
+}
+
+function ${module}${table.className}Import() {
+    ${module}${table.className}Dialogs.find('div[name="import"]').removeClass('hidden');
+    ${module}${table.className}Dialogs.modal('show');
+}
+
+function ${module}${table.className}ImportExe() {
+    if (${module}${table.className}Excel.length > 0) {
+        ${module}${table.className}Excel.data('bootstrapValidator').validate();
+        if (${module}${table.className}Excel.data('bootstrapValidator').isValid()) {
+            ${module}${table.className}Upload();
+        }
+    }
+}
+
+function ${module}${table.className}Upload() {
+    // 隐藏之前做一次reset
+    ${module}${table.className}Excel.data("bootstrapValidator").resetForm();
+    var dialogs = ${module}${table.className}Dialogs;
+    dialogs.find('.modal-content').addClass('hidden');
+    dialogs.find('div[name="doing"]').removeClass('hidden');
+    //
+    dialogs.find('button[name="close"]').addClass('hidden');
+    dialogs.find('#tips').text('');
+    //
+    dialogs.find('div[name="waiting"]').removeClass('hidden');
+    dialogs.find('div[name="success"]').addClass('hidden');
+    dialogs.find('div[name="failed"]').addClass('hidden');
+    //
+    var excel = ${module}${table.className}Excel.find('input[name="file"]');
+    var data = new FormData();
+    data.append("file", excel.get(0).files[0]);
+    $.ajax({
+        type: 'POST',
+        url: '/${module}/${table.fieldName}/import',
+        data: data,
+        dataType: 'json',
+        processData: false, //必须false才会自动加上正确的Content-Type
+        contentType: false,//必须false才会避开jQuery对 formdata 的默认处理
+        xhr: function () {
+            var xhr = $.ajaxSettings.xhr();
+            if (${module}${table.className}Progress && xhr.upload) {
+                xhr.upload.addEventListener("progress", ${module}${table.className}Progress, false);
+                return xhr;
+            }
+        }, success: function (json) {
+            dialogs.find('button[name="close"]').removeClass('hidden');
+            dialogs.find('div[name="waiting"]').addClass('hidden');
+            if (json.code == 0) {
+                dialogs.find('div[name="success"]').removeClass('hidden');
+                dialogs.find('div[name="failed"]').addClass('hidden');
+            } else {
+                dialogs.find('div[name="success"]').addClass('hidden');
+                dialogs.find('div[name="failed"]').removeClass('hidden');
+            }
+            dialogs.find('#tips').text(json.msg);
+        }, error: function (error) {
+            dialogs.find('button[name="close"]').removeClass('hidden');
+            dialogs.find('div[name="waiting"]').addClass('hidden');
+            dialogs.find('div[name="success"]').addClass('hidden');
+            dialogs.find('div[name="failed"]').removeClass('hidden');
+            dialogs.find('#tips').text('服务器异常');
+        }
+    });
+}
+
+function ${module}${table.className}Progress(evt) {
+    var loaded = evt.loaded;
+    var total = evt.total;
+    if (loaded == total) {
+        ${module}${table.className}Dialogs.find('#tips').text('正在保存...');
+    } else {
+        var percent = Math.floor(100 * loaded / total);
+        ${module}${table.className}Dialogs.find('#tips').text('正在上传[' + percent + '%]');
+    }
+}

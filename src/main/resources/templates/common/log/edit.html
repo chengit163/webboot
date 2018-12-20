@@ -1,0 +1,122 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger" th:text="#{label.edit}+#{common.log}"></h5>
+</div>
+
+<div class="modal-body">
+    <form id="common_log_edit_form" class="form-horizontal">
+        <input type="hidden" name="id" th:value="${log.id}"/>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{common.log.username}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="username" th:value="${log.username}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{common.log.ip}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="ip" th:value="${log.ip}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{common.log.action}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="action" th:value="${log.action}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{common.log.url}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="url" th:value="${log.url}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{common.log.method}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <select name="method" class="form-control">
+                        <option value="">-----</option>
+                        <option th:selected="${log.method == -1}" value="-1">UNKNOWN</option>
+                        <option th:selected="${log.method == 0}" value="0">GET</option>
+                        <option th:selected="${log.method == 1}" value="1">POST</option>
+                        <option th:selected="${log.method == 2}" value="2">PUT</option>
+                        <option th:selected="${log.method == 3}" value="3">DELETE</option>
+                        <option th:selected="${log.method == 4}" value="4">HEADER</option>
+                        <option th:selected="${log.method == 5}" value="5">OPTIONS</option>
+                    </select>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{common.log.args}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="args" th:value="${log.args}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{common.log.func}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="func" th:value="${log.func}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{common.log.os}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="os" th:value="${log.os}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{common.log.browser}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="text" name="browser" th:value="${log.browser}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label no-padding-right" th:text="#{common.log.cost}"></label>
+            <div class="col-xs-12 col-sm-5">
+                <span class="block input-icon input-icon-right">
+                    <input type="number" name="cost" th:value="${log.cost}" class="form-control"/>
+                </span>
+            </div>
+            <div class="col-xs-12 col-sm-5 inline"></div>
+        </div>
+    </form>
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+        <button class="btn btn-sm btn-primary" onclick="commonLogEdit();">
+            <i class="ace-icon fa fa-check"></i>
+            <span th:text="#{confirm.btn.save}"></span>
+        </button>
+    </div>
+</div>
+
+<script src="js/app/common/log/edit.js"></script>

@@ -1,0 +1,67 @@
+$(function () {
+    $('#${module}_${table.fieldName}_edit_form').bootstrapValidator({
+        feedbackIcons: {
+            valid: 'ace-icon fa fa-check-circle',
+            invalid: 'ace-icon fa fa-times-circle',
+            validating: 'ace-icon fa fa-info-circle'
+        },
+        fields: {
+#foreach ($column in $table.columns)
+#if ($column.columnName != $pk.columnName && $column.javaType != 'java.util.Date')
+            ${column.fieldName}: {
+                validators: {
+#if ($column.isNullable != 'YES')
+                    notEmpty: {message: '不能为空'},
+#end
+#if ($column.rule)
+#if ($column.rule.min && $column.rule.max)
+                    stringLength: {
+                        min: ${column.rule.min},
+                        max: ${column.rule.max},
+                        message: '长度必须在${column.rule.min}~${column.rule.max}之间'
+                    },
+#end
+#if ($column.rule.regex)
+                    regexp: {
+                        regexp: /${column.rule.regex}/,
+                        message: '${column.rule.note}'
+                    },
+#end
+#end
+                }
+            },
+#end
+#end
+        }
+    });
+});
+
+function ${module}${table.className}Edit() {
+    $('#${module}_${table.fieldName}_edit_form').data('bootstrapValidator').validate();
+    if ($('#${module}_${table.fieldName}_edit_form').data('bootstrapValidator').isValid()) {
+        ${module}${table.className}Dialog.modalDialogShowLoading();
+        $.ajax({
+            type: 'PUT',
+            url: '/${module}/${table.fieldName}',
+            data: $('#${module}_${table.fieldName}_edit_form').serialize(),
+            success: function (json) {
+                if (json.code == 0) {
+                    var row = $('#${module}_${table.fieldName}_edit_form').serializeJson();
+                    var index = ${module}${table.className}Table.find('tr[data-uniqueid="' + row['${pk.fieldName}'] + '"]').attr('data-index');
+                    if (/^\d+$/.test(index)) {
+                        ${module}${table.className}Table.bootstrapTable('updateRow', {index: index, row: row});
+                    }
+                    ${module}${table.className}Dialog.modal('hide');
+                    toastr.success(json.msg);
+                }
+                else {
+                    ${module}${table.className}Dialog.modalDialogHideLoading();
+                    toastr.error('msg: ' + json.msg, 'code: ' + json.code);
+                }
+            }, error: function () {
+                ${module}${table.className}Dialog.modalDialogHideLoading();
+                toastr.error('Server Error');
+            }
+        });
+    }
+}

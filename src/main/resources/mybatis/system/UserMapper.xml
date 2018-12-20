@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cit.web.system.dao.UserDao">
+    <!--结果集-->
+    <resultMap id="userResultMap" type="com.cit.web.system.entity.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime"/>
+        <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp"/>
+        <result column="user_id_create" jdbcType="INTEGER" property="userIdCreate"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <!--查询数量-->
+    <!--排除: password(密码)-->
+    <select id="count" resultType="int">
+        SELECT COUNT(0)
+        FROM sys_user
+        <where>
+          <if test="id != null and id.trim() != ''">and `id` = #{id}</if>
+          <if test="username != null and username.trim() != ''">and `username` = #{username}</if>
+          <if test="nickname != null and nickname.trim() != ''">and `nickname` = #{nickname}</if>
+          <if test="phone != null and phone.trim() != ''">and `phone` = #{phone}</if>
+          <if test="email != null and email.trim() != ''">and `email` = #{email}</if>
+          <if test="lastLoginTime != null and lastLoginTime.trim() != ''">and `last_login_time` = #{lastLoginTime}</if>
+          <if test="lastLoginIp != null and lastLoginIp.trim() != ''">and `last_login_ip` = #{lastLoginIp}</if>
+          <if test="userIdCreate != null and userIdCreate.trim() != ''">and `user_id_create` = #{userIdCreate}</if>
+          <if test="status != null and status.trim() != ''">and `status` = #{status}</if>
+          <if test="gmtCreate != null and gmtCreate.trim() != ''">and `gmt_create` = #{gmtCreate}</if>
+          <if test="gmtModified != null and gmtModified.trim() != ''">and `gmt_modified` = #{gmtModified}</if>
+        </where>
+    </select>
+
+    <!--查询列表-->
+    <!--排除: password(密码)-->
+    <select id="list" resultMap="userResultMap">
+        SELECT
+        `id`,
+        `username`,
+        `nickname`,
+        `phone`,
+        `email`,
+        `last_login_time`,
+        `last_login_ip`,
+        `user_id_create`,
+        `status`,
+        `gmt_create`,
+        `gmt_modified`
+        FROM sys_user
+        <where>
+            <if test="id != null and id.trim() != ''">and `id` = #{id}</if>
+            <if test="username != null and username.trim() != ''">and `username` = #{username}</if>
+            <if test="nickname != null and nickname.trim() != ''">and `nickname` = #{nickname}</if>
+            <if test="phone != null and phone.trim() != ''">and `phone` = #{phone}</if>
+            <if test="email != null and email.trim() != ''">and `email` = #{email}</if>
+            <if test="lastLoginTime != null and lastLoginTime.trim() != ''">and `last_login_time` = #{lastLoginTime}</if>
+            <if test="lastLoginIp != null and lastLoginIp.trim() != ''">and `last_login_ip` = #{lastLoginIp}</if>
+            <if test="userIdCreate != null and userIdCreate.trim() != ''">and `user_id_create` = #{userIdCreate}</if>
+            <if test="status != null and status.trim() != ''">and `status` = #{status}</if>
+            <if test="gmtCreate != null and gmtCreate.trim() != ''">and `gmt_create` = #{gmtCreate}</if>
+            <if test="gmtModified != null and gmtModified.trim() != ''">and `gmt_modified` = #{gmtModified}</if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                ORDER BY `${sort}` ${order}
+            </when>
+            <otherwise>
+                ORDER BY `id` ${order}
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--获取-->
+    <!--排除: password(密码)-->
+    <select id="get" resultMap="userResultMap">
+        SELECT
+        `id`,
+        `username`,
+        `nickname`,
+        `phone`,
+        `email`,
+        `last_login_time`,
+        `last_login_ip`,
+        `user_id_create`,
+        `status`,
+        `gmt_create`,
+        `gmt_modified`
+        FROM sys_user
+        WHERE `id` = #{id}
+    </select>
+
+    <!--插入-->
+    <insert id="save" parameterType="com.cit.web.system.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_user
+        (
+        `username`,
+        `password`,
+        `nickname`,
+        `phone`,
+        `email`,
+        `last_login_time`,
+        `last_login_ip`,
+        `user_id_create`,
+        `status`,
+        `gmt_create`,
+        `gmt_modified`
+        )
+        VALUES
+        (
+        #{username},
+        #{password},
+        #{nickname},
+        #{phone},
+        #{email},
+        #{lastLoginTime},
+        #{lastLoginIp},
+        #{userIdCreate},
+        #{status},
+        #{gmtCreate},
+        #{gmtModified}
+        )
+    </insert>
+
+    <!--更新-->
+    <!--排除: username(用户名)-->
+    <update id="update" parameterType="com.cit.web.system.entity.User">
+        UPDATE sys_user
+        <set>
+          <if test="password != null">`password` = #{password},</if>
+          <if test="nickname != null">`nickname` = #{nickname},</if>
+          <if test="phone != null">`phone` = #{phone},</if>
+          <if test="email != null">`email` = #{email},</if>
+          <if test="lastLoginTime != null">`last_login_time` = #{lastLoginTime},</if>
+          <if test="lastLoginIp != null">`last_login_ip` = #{lastLoginIp},</if>
+          <if test="userIdCreate != null">`user_id_create` = #{userIdCreate},</if>
+          <if test="status != null">`status` = #{status},</if>
+          <if test="gmtCreate != null">`gmt_create` = #{gmtCreate},</if>
+          <if test="gmtModified != null">`gmt_modified` = #{gmtModified},</if>
+        </set>
+        WHERE `id` = #{id}
+    </update>
+
+    <!--删除-->
+    <delete id="remove">
+        DELETE FROM sys_user WHERE `id` = #{id}
+    </delete>
+
+    <!--批量删除-->
+    <delete id="batchRemove">
+        DELETE FROM sys_user WHERE `id` IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--批量插入-->
+    <insert id="batchSave" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_user
+        (
+        `username`,
+        `password`,
+        `nickname`,
+        `phone`,
+        `email`,
+        `last_login_time`,
+        `last_login_ip`,
+        `user_id_create`,
+        `status`,
+        `gmt_create`,
+        `gmt_modified`
+        )
+        VALUES
+        <foreach collection="users" item="user" separator=",">
+        (
+        #{user.username},
+        #{user.password},
+        #{user.nickname},
+        #{user.phone},
+        #{user.email},
+        #{user.lastLoginTime},
+        #{user.lastLoginIp},
+        #{user.userIdCreate},
+        #{user.status},
+        #{user.gmtCreate},
+        #{user.gmtModified}
+        )
+        </foreach>
+    </insert>
+
+
+    <!---->
+    <!---->
+    <!---->
+    <!--通过用户名获取(含密码)-->
+    <select id="getByUsername" resultMap="userResultMap">
+        SELECT
+        `id`,
+        `username`,
+        `password`,
+        `nickname`,
+        `phone`,
+        `email`,
+        `last_login_time`,
+        `last_login_ip`,
+        `user_id_create`,
+        `status`,
+        `gmt_create`,
+        `gmt_modified`
+        FROM sys_user
+        WHERE `username` = #{username}
+    </select>
+
+    <!--通过id获取用户名-->
+    <select id="getUsernameById" resultType="string">
+        SELECT `username` FROM sys_user WHERE `id` = #{id}
+    </select>
+
+    <!--通过id更新密码-->
+    <update id="updatePasswordById">
+        UPDATE sys_user SET `password` = #{password}  WHERE `id` = #{id}
+    </update>
+
+</mapper>

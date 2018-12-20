@@ -1,0 +1,62 @@
+<div id="system_online_content">
+
+    <shiro:hasPermission name="system:user:get">
+        <input type="hidden" name="hidden_system_user_get" th:value="#{system.user}"/>
+    </shiro:hasPermission>
+    <shiro:hasPermission name="system:online:remove">
+        <input type="hidden" name="hidden_remove" th:value="#{btn.remove}"/>
+    </shiro:hasPermission>
+
+    <!--widget-->
+    <div id="system_online_widget" class="widget-box">
+        <!--head-->
+        <div class="widget-header widget-header-small">
+            <div class="widget-toolbar">
+                <a href="#" data-action="fullscreen">
+                    <i class="ace-icon fa fa-expand info bigger-125"></i>
+                </a>
+            </div>
+        </div><!--/.widget-header-->
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <!--query-->
+
+                <!--toolbar-->
+                <div id="system_online_toolbar">
+                    <h5 class="blue" id="system_online_info"></h5>
+                </div>
+
+                <!--table-->
+                <table id="system_online_table" class="table" data-show-jumpto="true">
+                    <thead>
+                    <tr>
+                        <th data-valign="middle"></th>
+                        <th data-field="principals.username" data-valign="middle"><span th:text="#{system.user.username}"></span></th>
+                        <th data-field="principals.lastLoginTime" data-valign="middle"><span th:text="#{system.user.lastLoginTime}"></span></th>
+                        <th data-field="starttimestamp" data-valign="middle"><span th:text="#{system.online.starttimestamp}"></span></th>
+                        <th data-field="lastaccesstime" data-valign="middle"><span th:text="#{system.online.lastaccesstime}"></span></th>
+                        <th data-field="timeout" data-valign="middle"><span th:text="#{system.online.timeout}"></span></th>
+                        <th data-field="host" data-valign="middle"><span th:text="#{system.online.host}"></span></th>
+                        <th data-field="os" data-valign="middle"><span th:text="#{system.online.os}"></span></th>
+                        <th data-field="browser" data-valign="middle"><span th:text="#{system.online.browser}"></span></th>
+                        <th data-field="id" data-valign="middle"><span></span></th>
+                    </tr>
+                    </thead>
+                </table>
+
+            </div><!--/.widget-main-->
+        </div><!--/.widget-body-->
+    </div>
+
+    <!--dialog-->
+    <div id="system_online_dialog" class="modal" tabindex="-1" style="display: none;" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div><!--/dialog-->
+
+</div>
+
+<script src="js/app/system/online/main.js"></script>

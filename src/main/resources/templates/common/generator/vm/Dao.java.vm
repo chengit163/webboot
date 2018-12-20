@@ -1,0 +1,28 @@
+package ${packageName}.${module}.dao;
+
+
+import ${packageName}.${module}.entity.${table.className};
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+import java.util.Map;
+
+@Mapper
+public interface ${table.className}Dao
+{
+    int count(Map<String, Object> map);
+
+    List<${table.className}> list(Map<String, Object> map);
+
+    ${table.className} get(${pk.javaType} ${pk.fieldName});
+
+    int save(${table.className} ${table.fieldName});
+
+    int update(${table.className} ${table.fieldName});
+
+    int remove(${pk.javaType} ${pk.fieldName});
+
+    int batchRemove(${pk.javaType}[] ${pk.fieldName}s);
+
+}
+

@@ -1,0 +1,5 @@
+#${packageName}.${module}.entity.${table.className}
+${module}.${table.fieldName}=${table.tableComment}
+#foreach ($column in $table.columns)
+${module}.${table.fieldName}.${column.fieldName}=${column.columnComment}
+#end

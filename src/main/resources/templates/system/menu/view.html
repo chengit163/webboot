@@ -1,0 +1,74 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h5 class="blue bigger" th:text="#{label.view}+#{system.menu}"></h5>
+</div>
+
+<div class="modal-body">
+    <div class="profile-user-info profile-user-info-striped">
+
+        <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.menu.pid}"></div>
+            <div class="profile-info-value">
+                <span th:text="${menu.pid}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.menu.name}"></div>
+            <div class="profile-info-value">
+                <span th:text="${menu.name}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.menu.url}"></div>
+            <div class="profile-info-value">
+                <span th:text="${menu.url}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.menu.permission}"></div>
+            <div class="profile-info-value">
+                <span th:text="${menu.permission}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.menu.icon}"></div>
+            <div class="profile-info-value">
+                <span th:text="${menu.icon}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.menu.type}"></div>
+            <div class="profile-info-value" th:switch="${menu.type}">
+                <span th:case="-1">其他</span>
+                <span th:case="0">目录</span>
+                <span th:case="1">菜单</span>
+                <span th:case="2">按钮</span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.menu.orders}"></div>
+            <div class="profile-info-value">
+                <span th:text="${menu.orders}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.menu.gmtCreate}"></div>
+            <div class="profile-info-value">
+                <span th:text="${menu.gmtCreate}?${#dates.format(menu.gmtCreate,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+         <div class="profile-info-row">
+            <div class="profile-info-name" th:text="#{system.menu.gmtModified}"></div>
+            <div class="profile-info-value">
+                <span th:text="${menu.gmtModified}?${#dates.format(menu.gmtModified,'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+     </div>
+
+    <div style="padding: 5px;text-align: right; border-top: 1px solid #e5e5e5;">
+        <button class="btn btn-sm" data-dismiss="modal">
+            <i class="ace-icon fa fa-times"></i>
+            <span th:text="#{confirm.btn.cancel}"></span>
+        </button>
+    </div>
+</div>
